@@ -7,7 +7,10 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 public class Main extends JFrame implements ActionListener
 {
 	public static final int WIDTH = 600;
@@ -48,7 +51,15 @@ public class Main extends JFrame implements ActionListener
 
 	
 	
+	private JTextField FlightName;
+    private JTextField capacity;
+    private JTextField startDate;
+    private JTextField endDate;
+    private JTextField startLocation;
+    private JTextField endLocation;
+
 	
+	private JButton flightAdditionButton;
 	public Main( )
 	{
 		setSize(WIDTH, HEIGHT);
@@ -166,6 +177,34 @@ public class Main extends JFrame implements ActionListener
 			deckPanel.add("checkin", checkin);
 		// 체크인 화면 종료
 			
+			
+		//inhyuk
+		//관리자
+		JPanel manager = new JPanel();
+		manager.setLayout(new GridLayout(0, 1, 10, 10));
+		manager.setBackground(Color.LIGHT_GRAY);
+		JLabel managerLabel = new JLabel("Manager Page"); 
+		FlightName = new JTextField("비행기 정보를 입력하세요", 20);
+		capacity = new JTextField("인원을 입력하세요" , 5);
+		startDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
+		endDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
+		startLocation = new JTextField("출발지를 입력하세요" , 20);
+		endLocation = new JTextField("도착지를 입력하세요" , 20);
+		
+		manager.add(managerLabel);
+		manager.add(FlightName);
+		manager.add(capacity);
+		manager.add(startDate);
+		manager.add(endDate);
+		manager.add(startLocation);
+		manager.add(endLocation);
+
+		flightAdditionButton = new JButton("비행 정보 제출");
+		flightAdditionButton.addActionListener(this);
+		manager.add(flightAdditionButton);
+
+			deckPanel.add("manager" , manager);
+			
 		// 현황 조회 화면 시작	
 		JPanel schedule = new JPanel( );
 		schedule.setLayout(new GridLayout(0, 1, 10, 10));
@@ -206,6 +245,11 @@ public class Main extends JFrame implements ActionListener
 		JButton scheduleButton = new JButton("Schedule");
 		scheduleButton.addActionListener(this);
 		buttonPanel1.add(scheduleButton);
+		// inhyuk
+		JButton managerButton = new JButton("Manager");
+		managerButton.addActionListener(this);
+		buttonPanel1.add(managerButton);
+
 		// 버튼 판넬 1 종료
 		
 		// 버튼 판넬 2 시작
@@ -232,6 +276,12 @@ public class Main extends JFrame implements ActionListener
 		JButton scheduleConfirm = new JButton("ScheduleC");
 		scheduleConfirm.addActionListener(this);
 		buttonPanel2.add(scheduleConfirm);
+		
+		//inhyuk
+		JButton managerConfirm = new JButton("ManagerC");
+		managerConfirm.addActionListener(this);
+		buttonPanel2.add(managerConfirm);
+
 		// 버튼 판넬 2 종료
 			contentPane.add(buttonPanel1, BorderLayout.NORTH);
 			contentPane.add(buttonPanel2, BorderLayout.SOUTH);
@@ -245,8 +295,12 @@ public class Main extends JFrame implements ActionListener
 		
 		if (actionCommand.equals("Main")) dealer.show(deckPanel, "main"); // 화면전환
 		else if (actionCommand.equals("Reservation")) dealer.show(deckPanel, "reservation"); //화면전환
-		else if (actionCommand.equals("Inquiry")) dealer.show(deckPanel, "inquiry"); //화면전환
-		else if (actionCommand.equals("checkIn")) dealer.show(deckPanel, "checkin"); // 화면전환
+		else if (actionCommand.equals("Inquiry")){
+			if(!isLogined) dealer.show(deckPanel, "inquiry"); //화면전환
+		} 
+		else if (actionCommand.equals("checkIn")){
+			if(!isLogined) dealer.show(deckPanel, "checkin"); // 화면전환
+		} 
 		else if (actionCommand.equals("Schedule")) dealer.show(deckPanel, "schedule"); //화면전환
 		else if (actionCommand.equals("Register")) {
 			dealer.show(deckPanel, "register");
@@ -262,6 +316,9 @@ public class Main extends JFrame implements ActionListener
 				JOptionPane.showMessageDialog(null, "회원가입에 실패하였습니다");	
 			}
 			
+		}
+		else if(actionCommand.equals("Manager")){
+			dealer.show(deckPanel , "manager");
 		}
 		
 		else if (actionCommand.equals("MainC")) //로그인 버튼 클릭시에 로그인 true로 변경
@@ -326,6 +383,10 @@ public class Main extends JFrame implements ActionListener
 		else if (actionCommand.equals("Logout")) {
 			dealer.show(deckPanel, "main");
 		}
+		else if(e.getSource() ==flightAdditionButton){
+			createFlight(FlightName.getText() , capacity.getText() , startDate.getText() , endDate.getText() , startLocation.getText() , endLocation.getText() );
+
+		}
 	
 			System.out.println("Error in CardLayout Demo.");
 	}
@@ -334,7 +395,45 @@ public class Main extends JFrame implements ActionListener
 	{
 		Main demoGui = new Main( ); demoGui.setVisible(true);
 	}
+public void createFlight(String FlightName, String capacity ,String startDate ,String endDate , String startLocation ,String endLocation){
+    	 
+		 String newData = FlightName + ";" + capacity + ";" + startDate + ";" + endDate + ";" + startLocation + ";" + endLocation + "\n";
 
+		 try {
+            // 1. 파일 객체 생성
+            File file = new File("writeFile.txt");
+            // 2. 파일 존재여부 체크 및 생성
+            if (!file.exists())
+                file.createNewFile();
+            // 3. Buffer를 사용해서 File에 write할 수 있는 BufferedWriter 생성
+            FileWriter fw = new FileWriter(file, true);
+            BufferedWriter writer = new BufferedWriter(fw);
+            // 4. 파일에 쓰기
+            writer.write(newData);
+            // 5. BufferedWriter close
+            writer.close();
+        }
+		catch (IOException e) {
+            e.printStackTrace();
+        }
+
+		JOptionPane.showMessageDialog(null, "비행 정보가 추가되었습니다.");
+	}
+
+	public void nonMemberVarification(String page){
+		switch(page){
+			case "Reservation":
+
+			break;
+			case "checkIn":
+				dealer.show(deckPanel, "inquiry");
+			break;
+			case "Inquiry":
+				dealer.show(deckPanel, "inquiry");
+			break;
+
+		}	
+		}
 }
 
 	
