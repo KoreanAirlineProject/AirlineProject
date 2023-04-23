@@ -19,7 +19,7 @@ public class Main extends JFrame implements ActionListener
 	private String [] reservationInfo = new String[7]; // 항공권예매 정보
 	private String [] veiwInfo = new String[3]; //예약조회 정보
 	private String [] checkInInfo = new String[3]; //체크인 정보 
-	private String [] scheduleInfo = new String[3]; // 항공편 현황 정보
+	private String [] scheduleInfo = new String[5]; // 항공편 현황 정보
 	private Boolean isLogined = false; // 로그인 유무
 	
 	
@@ -213,6 +213,12 @@ public class Main extends JFrame implements ActionListener
 		schedule.add(shcheLabel);
 		kindOfTicketS = new JTextField("티켓 종류를 입력하세요 (1.왕복 2.편도 3.다구간)", 30);
 		schedule.add(kindOfTicketS);
+
+		startDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
+		schedule.add(startDate);
+		endDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
+		schedule.add(endDate);
+
 		departureS = new JTextField("출발지를 입력하세요", 10);
 		schedule.add(departureS);
 		arrivalS = new JTextField("도착지를 입력하세요", 10);
@@ -379,6 +385,10 @@ public class Main extends JFrame implements ActionListener
 			scheduleInfo[0] = kindOfTicketS.getText();
 			scheduleInfo[1] = departureS.getText();
 			scheduleInfo[2] = arrivalS.getText();
+			scheduleInfo[3] = startDate.getText();
+			scheduleInfo[4] = endDate.getText();
+			FlightSearch flightSearch = new FlightSearch();
+			flightSearch.searchSchedule(scheduleInfo[1], scheduleInfo[2], scheduleInfo[3], scheduleInfo[4]);
 		}
 		else if (actionCommand.equals("Logout")) {
 			dealer.show(deckPanel, "main");
@@ -437,90 +447,3 @@ public void createFlight(String FlightName, String capacity ,String startDate ,S
 		}	
 		}
 }
-
-	
-
-
-
-/*
-public class Main {
-	
-	public static void main(String arg[]) {
-	
-		
-	private String [] reservationInfo = new String[6]; // 항공권예매 정보
-	private String [] veiwInfo = new String[3]; //예약조회 정보
-	private String [] checkInInfo = new String[3]; //체크인 정보 
-	private String [] scheduleInfo = new String[3]; // 항공편 현황 정보
-	
-	
-	int answer = 0; // 유저의 답변을 위한 변수
-	Boolean isLogined;
-	
-	
-	
-	System.out.println("로그인 하시겠습니니까? (1.예 2.아니오): ");
-	Scanner keyboard = new Scanner(System.in);
-	answer = keyboard.nextInt();
-	isLogined = isLogined(answer);
-	
-	System.out.println("메뉴를 고르세요: 1.항공권 예매 2.예약 조회 3.체크인 4.항공편 현황" );
-	answer = keyboard.nextInt();
-	
-	if(answer == 1) // 항공권 예매
-	{
-		System.out.println("티켓 종류를 입력하세요 (1.왕복 2.편도 3.다구간): ");
-		reservationInfo[0] =  keyboard.next();
-		System.out.println("출발지를 입력하세요: ");
-		reservationInfo[1] =  keyboard.next();
-		System.out.println("도착지를 입력하세요: ");
-		reservationInfo[2] =  keyboard.next();
-		System.out.println("탑승일을 입력하세요 (ex.1999/7/6): ");
-		reservationInfo[3] =  keyboard.next();
-		System.out.println("탑승객 인원 수를 숫자로만 입력하세요: ");
-		reservationInfo[4] =  keyboard.next();
-		System.out.println("좌석 등급을 입력하세요 (1.일반석 2.프레스티지석 3.일등석): ");
-		reservationInfo[5] =  keyboard.next();
-		
-	}
-	else if(answer == 2) // 예약 조회
-	{
-		System.out.println("예약번호 혹은 항공권 번호를 입력하세요: ");
-		veiwInfo[0] = keyboard.next();
-		System.out.println("탑승일을 입력하세요 (ex.1999/7/6): ");
-		veiwInfo[1] = keyboard.next();
-		System.out.println("승객의 이름을 입력하세요 (ex.홍길동 / HongGildong): ");
-		veiwInfo[2] = keyboard.next();
-		
-	}
-	else if(answer == 3) // 체크인
-	{
-		System.out.println("예약번호 혹은 항공권 번호를 입력하세요: ");
-		checkInInfo[0] = keyboard.next();
-		System.out.println("탑승일을 입력하세요 (ex.1999/7/6): ");
-		checkInInfo[1] = keyboard.next();
-		System.out.println("승객의 이름을 입력하세요 (ex.홍길동 / HongGildong): ");
-		checkInInfo[2] = keyboard.next();
-	}
-	else if(answer ==4) //항공편 현황
-	{
-		System.out.println("티켓 종류를 입력하세요 (1.왕복 2.편도): ");
-		scheduleInfo[0] =  keyboard.next();
-		System.out.println("출발지를 입력하세요: ");
-		scheduleInfo[1] = keyboard.next();
-		System.out.println("도착지를 입력하세요: ");
-		scheduleInfo[2] =  keyboard.next();		
-	}
-}
-	
-	
-	private static Boolean isLogined(int ans) {
-		if(ans == 1)  return true;
-		 else 		  return false;
-		
-	}
-	
-}
-
-*/
-

@@ -6,12 +6,10 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 
 public class FlightSearch {
-    public void searchSchedule(String searchDepartureDate, String searchArrivalDate) {
+    public void searchSchedule(String searchFrom, String searchTo , String searchDepartureDate, String searchArrivalDate) {
         String filePath = "FlightSchedule.txt";
         ArrayList<FlightSearchRequest> requests = readRequestsFromFile(filePath);
 
-        String searchFrom = "ICN";
-        String searchTo = "MUC";
         // 비행 스케줄 검색
         StringBuilder result = new StringBuilder();
         for (FlightSearchRequest request : requests) {
