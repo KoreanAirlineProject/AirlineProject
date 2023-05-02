@@ -155,6 +155,7 @@ public class Main extends JFrame implements ActionListener
 		else if (actionCommand.equals("Register")) {
 			dealer.show(deckPanel, "register");
 		}
+		//
 		
 		else if(actionCommand.equals("register")) {
 
