@@ -1,2 +1,0 @@
-root|1234|inhyuk|1999-05-02
-ID|PW|이름|birthday
