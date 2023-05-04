@@ -6,6 +6,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 
+
 // import form.ReservationForm;
 
 import java.awt.*;
@@ -110,7 +111,9 @@ public class Main extends JFrame implements ActionListener
 						// 회원가입 화면 시작 
 						deckPanel.add("register", Register());
 						// 회원가입 화면 종료 
-						deckPanel.add("TicketsPanel" , TicketsPanel(new ArrayList<>() , "" , "" , "" , "" ,""));
+						deckPanel.add("TicketsPanel" , TicketsPanel("Scheduel",new ArrayList<>() , "" , "" , "" , "" ,""));
+
+						deckPanel.add("managerPanel" , managerPanel());
 						// 로그인 성공 후 메인화면 시작
 						
 		
@@ -199,50 +202,11 @@ public class Main extends JFrame implements ActionListener
 			
 		//inhyuk
 		//관리자
-		JPanel manager = new JPanel();
-		manager.setLayout(new GridLayout(0, 1, 10, 10));
-		manager.setBackground(Color.LIGHT_GRAY);
-		JLabel managerLabel = new JLabel("Manager Page"); 
-		FlightName = new JTextField("비행기 정보를 입력하세요", 20);
-		capacity = new JTextField("인원을 입력하세요" , 5);
-		startDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
-		endDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
-		startLocation = new JTextField("출발지를 입력하세요" , 20);
-		endLocation = new JTextField("도착지를 입력하세요" , 20);
-		
-		manager.add(managerLabel);
-		manager.add(FlightName);
-		manager.add(capacity);
-		manager.add(startDate);
-		manager.add(endDate);
-		manager.add(startLocation);
-		manager.add(endLocation);
-
-		flightAdditionButton = new JButton("비행 정보 제출");
-		flightAdditionButton.addActionListener(this);
-		manager.add(flightAdditionButton);
-
-			deckPanel.add("manager" , manager);
 			
 		// 현황 조회 화면 시작	
-		JPanel schedule = new JPanel();
-		schedule.setLayout(new GridLayout(0, 1, 10, 10));
-		schedule.setBackground(Color.LIGHT_GRAY);
-		JLabel shcheLabel = new JLabel("Flight Schedule");
-		schedule.add(shcheLabel);
-		kindOfTicketS = new JTextField("티켓 종류를 입력하세요 (1.왕복 2.편도 3.다구간)", 30);
-		schedule.add(kindOfTicketS);
 
-		startDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
-		schedule.add(startDate);
-		endDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
-		schedule.add(endDate);
-
-		departureS = new JTextField("출발지를 입력하세요", 10);
-		schedule.add(departureS);
-		arrivalS = new JTextField("도착지를 입력하세요", 10);
-		schedule.add(arrivalS);
-			deckPanel.add("schedule", schedule);
+		deckPanel.add("scheduelPanel" ,scheduelPanel());
+		
 			contentPane.add(deckPanel, BorderLayout.CENTER);
 		// 현황 조회 화면 종료
 		
@@ -316,7 +280,25 @@ public class Main extends JFrame implements ActionListener
 
 
 
-
+									private JPanel scheduelPanel(){
+										JPanel schedule = new JPanel();
+										schedule.setLayout(new GridLayout(0, 1, 10, 10));
+										schedule.setBackground(Color.LIGHT_GRAY);
+										JLabel shcheLabel = new JLabel("Flight Schedule");
+										schedule.add(shcheLabel);
+										kindOfTicketS = new JTextField("항공기 정보를 입력하세요", 30);
+										schedule.add(kindOfTicketS);
+										departureS = new JTextField("출발지를 입력하세요", 10);
+										schedule.add(departureS);
+										arrivalS = new JTextField("도착지를 입력하세요", 10);
+										schedule.add(arrivalS);
+										startDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
+										schedule.add(startDate);
+										endDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
+										schedule.add(endDate);
+										
+										return schedule;
+									}
 
 									// Inhyuk Refactoring
 									// 함수화 시킨 함수들
@@ -347,7 +329,7 @@ public class Main extends JFrame implements ActionListener
 									}
 
 
-									public JPanel LongButtonExample(String info1,String info2,String info3,String info4,String info5,String info6 , String info7) {
+									public JPanel LongButtonExample(String info1,String info2,String info3,String info4,String info5,String info6 , String info7 , String yesorno) {
 										setTitle("Long Button Example");
 										setDefaultCloseOperation(EXIT_ON_CLOSE);
 								
@@ -373,6 +355,7 @@ public class Main extends JFrame implements ActionListener
 										// JTextField textField6 = new JTextField(10);
 										// create button
 										JButton button;
+										
 										if(label7.getText().equals("이코노미") ) button = new JButton("예약ECO");
 										else if(label7.getText().equals("비지니스")) button = new JButton("예약BUS");
 										else button = new JButton("예약FIR");
@@ -387,14 +370,14 @@ public class Main extends JFrame implements ActionListener
 										panel.add(label5);
 										panel.add(label6);
 										panel.add(label7);
-										if(info1!="항공기 정보")panel.add(button);
+										if(info1!="항공기 정보" && yesorno == "yes") panel.add(button);
 									
 										setVisible(true);
 										
 										return panel;
 									}
-									private JPanel TicketsPanel(ArrayList<Ticket> tickets, String fromDateFT , String toDateFT, String fromLocationFT ,String toLocationFT, String gradeFT){
-										
+									private JPanel TicketsPanel(String type , ArrayList<Ticket> tickets, String fromDateFT , String toDateFT, String fromLocationFT ,String toLocationFT, String gradeFT){
+										System.out.println( "fromDataFT:"+ fromDateFT + "\n toDateFT : " + toDateFT +"\n fromLocationFT : " +fromLocationFT + "\n toLocationFT : " +toLocationFT + "\n gradeFT : "+gradeFT + "\n");
 										JPanel TicketsPanel = new JPanel( );
 										TicketsPanel.setLayout(new GridLayout( 3, 3, 10, 10));
 										TicketsPanel.setBackground(Color.LIGHT_GRAY);
@@ -423,16 +406,17 @@ public class Main extends JFrame implements ActionListener
 													ticketContents[i][5] =  ticket.getCapacity();
 													ticketContents[i][6] = ticket.getSeat();
 													
-													TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6]));
-	
+													TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6], "yes") );
 												}
 	
 												
 												
 											}	
 										} else{
+											
 											for(int i = 0 ; i < tickets.size() ; ++i){
-										
+												// System.out.println(tickets.get(i).getFromLocation());
+												
 												// Filtering
 												if(fromLocationFT.equals(tickets.get(i).getFromLocation())  
 												&& toLocationFT.equals(tickets.get(i).getToLocation())  &&
@@ -450,17 +434,55 @@ public class Main extends JFrame implements ActionListener
 													ticketContents[i][5] =  ticket.getCapacity();
 													ticketContents[i][6] = ticket.getSeat();
 													
-													TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6]));
+													
+													 
+													if(type=="reservation") TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6],"yes"));
+													else if(type=="schedule") TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6],"no"));
 	
 												}
 	
 												
-												
 											}	
 										}
+
+
+										if(type == "schedule") {
+											JButton closeButton = new JButton("닫기");
+											closeButton.addActionListener(this);
+											TicketsPanel.add(closeButton);	
+										}
+										
 											
 
 										return TicketsPanel;
+									}
+
+									private JPanel managerPanel() {
+										JPanel manager = new JPanel();
+										manager.setLayout(new GridLayout(0, 1, 10, 10));
+										manager.setBackground(Color.LIGHT_GRAY);
+										JLabel managerLabel = new JLabel("Manager Page");
+										FlightName = new JTextField("비행기 정보를 입력하세요", 20);
+										capacity = new JTextField("인원을 입력하세요" , 5);
+										startDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
+										endDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
+										startLocation = new JTextField("출발지를 입력하세요" , 20);
+										endLocation = new JTextField("도착지를 입력하세요" , 20);
+										grade = new JTextField("클래스를 입력해주세요" ,20);
+										manager.add(managerLabel);
+										manager.add(FlightName);
+										manager.add(startLocation);
+										manager.add(endLocation);
+										manager.add(startDate);
+										manager.add(endDate);
+										manager.add(capacity);
+										manager.add(grade);
+								
+										flightAdditionButton = new JButton("비행 정보 제출");
+										flightAdditionButton.addActionListener(this);
+										manager.add(flightAdditionButton);
+										
+										return manager;
 									}
 
 									private JPanel loginPanel(){
@@ -542,7 +564,10 @@ public class Main extends JFrame implements ActionListener
 		else if (actionCommand.equals("checkIn")){
 			if(!isLogined) dealer.show(deckPanel, "checkin"); // 화면전환
 		} 
-		else if (actionCommand.equals("Schedule")) dealer.show(deckPanel, "schedule"); //화면전환
+		else if (actionCommand.equals("Schedule")){
+			deckPanel.add("schedulePanel" , scheduelPanel());
+			dealer.show(deckPanel, "schedulePanel"); //화면전환	
+		} 
 		else if (actionCommand.equals("Register")) {
 			dealer.show(deckPanel, "register");
 		}
@@ -564,7 +589,9 @@ public class Main extends JFrame implements ActionListener
 			
 		}
 		else if(actionCommand.equals("Manager")){
-			dealer.show(deckPanel , "manager");
+			
+			deckPanel.add("managerPanel" , managerPanel());
+			dealer.show(deckPanel , "managerPanel");
 		}
 		
 
@@ -601,6 +628,19 @@ public class Main extends JFrame implements ActionListener
 							deckPanel.add("homepanel", homePanel(user.getName()));
 							dealer.show(deckPanel, "homepanel"); 
 							
+						}
+						else if(actionCommand.equals("비행 정보 제출")){
+							Manager manager = new Manager();
+							manager.createFlight(FlightName.getText(), startLocation.getText() , endLocation.getText() , startDate.getText() , endDate.getText() , capacity.getText() ,grade.getText() );
+
+							User user = User.getUser();
+							deckPanel.add("homepanel", homePanel(user.getName()));
+							dealer.show(deckPanel, "homepanel"); 
+						}
+						else if(actionCommand.equals("닫기")){
+							User user = User.getUser();
+							deckPanel.add("homepanel", homePanel(user.getName()));
+							dealer.show(deckPanel, "homepanel"); 
 						}
 		else if (actionCommand.equals("확인")) //로그인 버튼 클릭시에 로그인 true로 변경
 		{
@@ -647,7 +687,7 @@ public class Main extends JFrame implements ActionListener
 							Airline airline = new Airline();
 
 							try {
-								deckPanel.add("TicketsPanel" , TicketsPanel(airline.showFlights("./writeFile.txt") ,reservationInfo[1] , reservationInfo[2],reservationInfo[3] , reservationInfo[4],reservationInfo[5]));
+								deckPanel.add("TicketsPanel" , TicketsPanel("reservation" , airline.showFlights("./writeFile.txt") ,reservationInfo[1] , reservationInfo[2],reservationInfo[3] , reservationInfo[4],reservationInfo[5]));
 								System.out.println("!!!!");
 								dealer.show(deckPanel, "TicketsPanel");
 								System.out.println("h");
@@ -671,13 +711,23 @@ public class Main extends JFrame implements ActionListener
 		}
 		else if (actionCommand.equals("ScheduleC")) //현황 조회 확인 버튼 클릭시에 입력 받은 정보 배열에 저장
 		{
-			scheduleInfo[0] = kindOfTicketS.getText();
+			Airline airline = new Airline();
+			// scheduleInfo[0] = kindOfTicketS.getText();
 			scheduleInfo[1] = departureS.getText();
 			scheduleInfo[2] = arrivalS.getText();
 			scheduleInfo[3] = startDate.getText();
 			scheduleInfo[4] = endDate.getText();
-			FlightSearch flightSearch = new FlightSearch();
-			flightSearch.searchSchedule(scheduleInfo[1], scheduleInfo[2], scheduleInfo[3], scheduleInfo[4]);
+			try {
+				deckPanel.add("TicketsPanel" , TicketsPanel("schedule" , airline.showFlights("./writeFile.txt") , scheduleInfo[3],scheduleInfo[4], scheduleInfo[1],scheduleInfo[2]  , "전체"));
+
+			dealer.show(deckPanel, "TicketsPanel");
+			} catch (NumberFormatException | IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			System.out.println("!!!!");
+			// FlightSearch flightSearch = new FlightSearch();
+			// flightSearch.searchSchedule(scheduleInfo[1], scheduleInfo[2], scheduleInfo[3], scheduleInfo[4]);
 		}
 		else if (actionCommand.equals("Logout")) {
 			// dealer.show(deckPanel, "homepanel");
