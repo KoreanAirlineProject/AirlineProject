@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -153,7 +151,8 @@ public class User {
         
     }
 
-    public void makeReservation(User user) {  }
+    public void makeReservation(User user) { 
+    }
     public void viewReservation(User user) { }
     public void viewFlightSchedule(User user) {  }
     public void withdrawal(User user) { }

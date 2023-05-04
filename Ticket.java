@@ -11,23 +11,25 @@ public class Ticket {
     public Ticket(){
     }
 
-    public Ticket(String airplane, int capacity, String fromDate, String toDate,String fromLocation, String toLocation){
+    public Ticket(String airplane, String fromLocation, String toLocation, String fromDate, String toDate, String capacity, String seat){
         this.airplane = airplane;
         this.capacity = capacity;
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.fromLocation = fromLocation;
         this.toLocation = toLocation;
+        this.seat = seat;
     }
 
 
 
     private String airplane;
-    private int capacity;
+    private String capacity;
     private String fromDate;
     private String toDate;
     private String fromLocation;
     private String toLocation;
+    private String seat;
     
     
     public String getAirplane(){
@@ -37,10 +39,10 @@ public class Ticket {
         this.airplane = airplane;
     }
 
-    public int getCapacity(){
+    public String getCapacity(){
         return capacity;
     }
-    public void setCapacity(int capacity){
+    public void setCapacity(String capacity){
         this.capacity = capacity;
     }
 
@@ -75,5 +77,11 @@ public String getToLocation(){
 public void setToLocation(String toLocation){
     this.toLocation = toLocation;
 }
+public String getSeat(){
+    return seat;
+}
 
+public void setSeat(String seat){
+    this.seat = seat;
+}
 }

@@ -1,1 +1,1 @@
-new GridLayout(1, 7)
+ticketContents
