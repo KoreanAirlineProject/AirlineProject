@@ -1,5 +1,4 @@
 
-import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -64,8 +63,6 @@ public class Main extends JFrame implements ActionListener
 
 	
 	private JButton flightAdditionButton;
-
-
 	public Main( )
 	{
 		setSize(WIDTH, HEIGHT);
@@ -79,8 +76,6 @@ public class Main extends JFrame implements ActionListener
 		dealer = new CardLayout( );
 		deckPanel.setLayout(dealer);
 	
-		deckPanel.add("homepanel", homePanel(("")));
-
 		// 로그인 화면 시작
 		JPanel main = new JPanel( );
 		main.setLayout(new GridLayout(0, 1, 10, 10));
@@ -91,7 +86,7 @@ public class Main extends JFrame implements ActionListener
 		main.add(ID);
 		password = new JTextField("비밀번호를 입력하세요", 30);
 		main.add(password);
-		
+		Dimension btnSize = new Dimension(30 ,25);
 		JButton RegisterButton = new JButton("Register");
 		RegisterButton.setPreferredSize(new Dimension(20,20));
 		RegisterButton.addActionListener(this);
@@ -99,13 +94,31 @@ public class Main extends JFrame implements ActionListener
 		deckPanel.add("main", main);
 		
 		//로그인 화면 종료
-		deckPanel.add("loginPanel", loginPanel());
-
+		
 		// 회원가입 화면 시작 
 		
-		deckPanel.add("register", Register());
+		JPanel register = new JPanel();
+		register.setLayout(new GridLayout(0, 1, 10, 10));
+		register.setBackground(Color.LIGHT_GRAY);
+		JLabel regLabel = new JLabel("회원가입");
+		register.add(regLabel);
+		
+		regName = new JTextField("이름", 30);
+		register.add(regName);	
+		regID = new JTextField("ID", 30);
+		register.add(regID);	
+		regPW = new JTextField("PW", 30);
+		register.add(regPW);	
+		birthday = new JTextField("birthday", 30);
+		register.add(birthday);
+		JButton registerButton = new JButton("register");
+		registerButton.setPreferredSize(btnSize);
+		registerButton.addActionListener(this);
+		register.add(registerButton);
+		deckPanel.add("register", register);
+		
 		// 회원가입 화면 종료 
-		deckPanel.add("TicketsPanel" , TicketsPanel(new ArrayList<>() , "" , "" , "" , "" ,""));
+		
 		// 로그인 성공 후 메인화면 시작
 		
 		
@@ -130,7 +143,7 @@ public class Main extends JFrame implements ActionListener
 		reservation.add(departureDateR);
 		arrivalDateR = new JTextField("오는 날을 입력하세요 (ex.1999/7/6)", 10);
 		reservation.add(arrivalDateR);
-		number = new JTextField("탑승객 인원 입력", 10);
+		number = new JTextField("탑승객 인원 수를 숫자로만 입력하세요", 10);
 		reservation.add(number);
 		grade = new JTextField("좌석 등급을 입력하세요 (1.일반석 2.프레스티지석 3.일등석)", 10);
 		reservation.add(grade);
@@ -166,31 +179,7 @@ public class Main extends JFrame implements ActionListener
 		checkin.add(name);
 			deckPanel.add("checkin", checkin);
 		// 체크인 화면 종료
-
-
-				
-				User user = User.getUser();
-
-				JPanel loginSuccess = new JPanel();
-				loginSuccess.setLayout(new GridLayout(0, 1, 10, 10));
-				loginSuccess.setBackground(Color.LIGHT_GRAY);
-				JLabel mainLabel = new JLabel("Korean Air Home Page");
-				loginSuccess.add(mainLabel);
-				System.out.println("-->" + user.getId());
-				JLabel welcomeLabel = new JLabel(user.getName()+ "님" );
-				loginSuccess.add(welcomeLabel);
-				
-				JButton LogoutButton = new JButton("Logout");
-				LogoutButton.setPreferredSize(new Dimension(20,20));
-				LogoutButton.addActionListener(this);
-				loginSuccess.add(LogoutButton);
-				
-				deckPanel.add("loginSuccess", loginSuccess);
-				
-			// }
-			// else {
-			// 	JOptionPane.showMessageDialog(null, "일치하는 정보가 없습니다");	
-			// }
+			
 			
 		//inhyuk
 		//관리자
@@ -220,7 +209,7 @@ public class Main extends JFrame implements ActionListener
 			deckPanel.add("manager" , manager);
 			
 		// 현황 조회 화면 시작	
-		JPanel schedule = new JPanel();
+		JPanel schedule = new JPanel( );
 		schedule.setLayout(new GridLayout(0, 1, 10, 10));
 		schedule.setBackground(Color.LIGHT_GRAY);
 		JLabel shcheLabel = new JLabel("Flight Schedule");
@@ -277,9 +266,9 @@ public class Main extends JFrame implements ActionListener
 		buttonPanel2.setBackground(Color.BLACK);
 		buttonPanel2.setLayout(new FlowLayout( ));
 		
-		// JButton mainConfirm = new JButton("MainC");
-		// mainConfirm.addActionListener(this);
-		// buttonPanel2.add(mainConfirm);
+		JButton mainConfirm = new JButton("MainC");
+		mainConfirm.addActionListener(this);
+		buttonPanel2.add(mainConfirm);
 		
 		JButton reserConfirm = new JButton("ReservationC");
 		reserConfirm.addActionListener(this);
@@ -307,173 +296,6 @@ public class Main extends JFrame implements ActionListener
 			contentPane.add(buttonPanel2, BorderLayout.SOUTH);
 				dealer.first(deckPanel);
 		}
-
-
-		
-		private JPanel Register(){
-
-			Dimension btnSize = new Dimension(30 ,25);
-			JPanel register = new JPanel();
-			register.setLayout(new GridLayout(0, 1, 10, 10));
-			register.setBackground(Color.LIGHT_GRAY);
-			JLabel regLabel = new JLabel("회원가입");
-			register.add(regLabel);
-			
-			regName = new JTextField("이름", 30);
-			register.add(regName);	
-			regID = new JTextField("ID", 30);
-			register.add(regID);	
-			regPW = new JTextField("PW", 30);
-			register.add(regPW);	
-			birthday = new JTextField("birthday", 30);
-			register.add(birthday);
-			JButton registerButton = new JButton("register");
-			registerButton.setPreferredSize(btnSize);
-			registerButton.addActionListener(this);
-			register.add(registerButton);
-			
-
-			return register;
-		}
-
-
-		public JPanel LongButtonExample(String info1,String info2,String info3,String info4,String info5,String info6) {
-			setTitle("Long Button Example");
-			setDefaultCloseOperation(EXIT_ON_CLOSE);
-	
-			JPanel panel = new JPanel(new GridLayout(1, 7)); // 1 row, 7 columns
-			
-	
-			
-			// panel.setPreferredSize(new Dimension(10, 70));
-			add(panel);
-			// create labels and text fields
-			JLabel label1 = new JLabel(info1);
-			// JTextField textField1 = new JTextField(10);
-			JLabel label2 = new JLabel(info2);
-			// JTextField textField2 = new JTextField(10);
-			JLabel label3 = new JLabel(info3);
-			// JTextField textField3 = new JTextField(10);
-			JLabel label4 = new JLabel(info4);
-			// JTextField textField4 = new JTextField(10);
-			JLabel label5 = new JLabel(info5);
-			// JTextField textField5 = new JTextField(10);
-			JLabel label6 = new JLabel(info6);
-			// JTextField textField6 = new JTextField(10);
-			// create button
-			JButton button = new JButton("예약");
-			
-			
-			// add labels and text fields to the panel
-			panel.add(label1);
-			panel.add(label2);
-			panel.add(label3);
-			panel.add(label4);
-			panel.add(label5);
-			panel.add(label6);
-			if(info1!="항공기 정보")panel.add(button);
-		
-			setVisible(true);
-			
-			return panel;
-		}
-		private JPanel TicketsPanel(ArrayList<Ticket> tickets,  String fromLocationFT ,String toLocationFT, String fromDateFT , String toDateFT , String capacityFT){
-
-
-			System.out.println("!!");
-			
-			JPanel TicketsPanel = new JPanel( );
-			TicketsPanel.setLayout(new GridLayout( 3, 3, 10, 10));
-			TicketsPanel.setBackground(Color.LIGHT_GRAY);
-			String[][] ticketContents = new String[300][6];
-			System.out.println(tickets.size());
-			TicketsPanel.add(LongButtonExample("항공기 정보" , "출발지" , "도착지" , "출발일자" , "도착일자" , "인원"));
-			for(int i = 0 ; i < tickets.size() ; ++i){
-				// Filtering
-				// if(fromLocationFT == tickets.get(i).getFromLocation() &&
-				// toLocationFT == tickets.get(i).getToLocation() &&
-				// fromDateFT == tickets.get(i).getFromDate()&& 
-				// toDateFT == tickets.get(i).getToDate() &&
-				// capacityFT == tickets.get(i).getCapacity()){
-				// 	JButton TicketButton = new JButton("ticket");
-				// 	TicketButton.setPreferredSize(new Dimension(20,20));
-				// 	TicketButton.addActionListener(this);
-				// 	TicketsPanel.add(TicketButton);
-				// }
-				Ticket ticket = tickets.get(i);
-
-				ticketContents[i][0] = ticket.getAirplane();
-				ticketContents[i][1] = ticket.getFromLocation();
-				ticketContents[i][2] = ticket.getToLocation();
-				ticketContents[i][3] = ticket.getFromDate();
-				ticketContents[i][4] = ticket.getToDate();
-				ticketContents[i][5] =  Integer.toString(ticket.getCapacity());
-				
-				
-				TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5]));
-				
-			}	
-
-			return TicketsPanel;
-		}
-
-		private JPanel loginPanel(){
-			JPanel loginPanel = new JPanel( );
-			loginPanel.setLayout(new GridLayout(0, 1, 10, 10));
-			loginPanel.setBackground(Color.LIGHT_GRAY);
-			JLabel maintLabel = new JLabel("Login");
-			
-			loginPanel.add(maintLabel);
-			ID = new JTextField("아이디를 입력하세요", 30);
-			loginPanel.add(ID);
-			password = new JTextField("비밀번호를 입력하세요", 30);
-			loginPanel.add(password);
-			Dimension btnSize = new Dimension(30 ,25);
-			JButton checkLogin = new JButton("확인");
-			checkLogin.setPreferredSize(new Dimension(20,20));
-			checkLogin.addActionListener(this);
-			loginPanel.add(checkLogin);
-
-			return loginPanel;
-		}
-
-		
-
-	private JPanel homePanel(String username){
-	
-	JPanel homePanel = new JPanel();
-	homePanel.setLayout(new GridLayout(0, 1, 10, 10));
-	homePanel.setBackground(Color.LIGHT_GRAY);
-	JLabel mainLabel = new JLabel("Korean Air Home Page");
-	homePanel.add(mainLabel);
-	// System.out.println("-->" + user.getId());
-	if(username != "") {
-		JLabel welcomeLabel = new JLabel(username+ "님" );
-		homePanel.add(welcomeLabel);
-	}
-	
-	
-	
-	if(username != "") {
-		JButton LogoutButton = new JButton("Logout");
-		LogoutButton.setPreferredSize(new Dimension(20,20));
-		LogoutButton.addActionListener(this);
-		homePanel.add(LogoutButton);
-	} else{
-		JButton loginButton = new JButton("Login");
-		loginButton.addActionListener(this);
-		homePanel.add(loginButton);
-
-		JButton RegisterButton = new JButton("Register");
-		RegisterButton.setPreferredSize(new Dimension(20,20));
-		RegisterButton.addActionListener(this);
-		homePanel.add(RegisterButton);
-	}
-	
-	
-
-	return homePanel;
-}
 	
 	// 버튼 눌렸을 떄 처리
 	public void actionPerformed(ActionEvent e)
@@ -481,15 +303,7 @@ public class Main extends JFrame implements ActionListener
 		String actionCommand = e.getActionCommand( );
 		
 		if (actionCommand.equals("Main")) dealer.show(deckPanel, "main"); // 화면전환
-		else if (actionCommand.equals("Login")) {
-			// System.out.println("!!");
-			
-			// deckPanel.add("loginpanel", loginPanel());
-			dealer.show(deckPanel, "loginPanel"); // 화면전환
-		}
-		else if (actionCommand.equals("Reservation")){
-			dealer.show(deckPanel, "reservation"); //화면전환
-		} 
+		else if (actionCommand.equals("Reservation")) dealer.show(deckPanel, "reservation"); //화면전환
 		else if (actionCommand.equals("Inquiry")){
 			if(!isLogined) dealer.show(deckPanel, "inquiry"); //화면전환
 		} 
@@ -502,13 +316,10 @@ public class Main extends JFrame implements ActionListener
 		}
 		
 		else if(actionCommand.equals("register")) {
-			User user = User.getUser();
-			boolean isSuccessed = user.register(regID.getText(), regPW.getText(),regName.getText(), birthday.getText() , "./member.text");
-			// Register register = new Register(regID.getText(), regPW.getText(),regName.getText(), birthday.getText());
-			if( isSuccessed == true) {
+			Register register = new Register(regID.getText(), regPW.getText(),regName.getText(), birthday.getText());
+			if(register.saveFile() == 0) {
 				JOptionPane.showMessageDialog(null, "회원가입에 성공하셨습니다");
-				loginPanel();
-				dealer.show(deckPanel, "loginPanel"); // 화면전환
+				dealer.show(deckPanel, "main");
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "회원가입에 실패하였습니다");	
@@ -519,34 +330,48 @@ public class Main extends JFrame implements ActionListener
 			dealer.show(deckPanel , "manager");
 		}
 		
-		else if (actionCommand.equals("확인")) //로그인 버튼 클릭시에 로그인 true로 변경
+		else if (actionCommand.equals("MainC")) //로그인 버튼 클릭시에 로그인 true로 변경
 		{
 			System.out.println("preseed");
 
 			User user = User.getUser();
 			// Airline airline = new Airline();
-			System.out.println(ID.getText() +password.getText() +"preseed");
-			if(user.login("./member.txt" , ID.getText(), password.getText())){
+
+			if(user.login("./member.txt")){
 				JOptionPane.showMessageDialog(null, "로그인에 성공하였습니다.");
-				System.out.println("성공");
 				dealer.show(deckPanel , "register");
-				deckPanel.add("homepanel", homePanel(user.getName()));
-				dealer.show(deckPanel, "homepanel"); 
+
 			} else{
 				JOptionPane.showMessageDialog(null, "로그인 정보가 일치하지 않습니다.");
-				System.out.println("실패");
 			}
-		
-			
 
-			
+
 			// Login login = new Login(ID.getText(), password.getText());
 			// username = login.loadFile();
 			// System.out.println("==>" + username);
 			// if(username != "") {
 			// 	isLogined = true; 
 			// 	JOptionPane.showMessageDialog(null, "로그인에 성공하셨습니다");
+			// 	JPanel loginSuccess = new JPanel();
+			// 	loginSuccess.setLayout(new GridLayout(0, 1, 10, 10));
+			// 	loginSuccess.setBackground(Color.LIGHT_GRAY);
+			// 	JLabel mainLabel = new JLabel("Korean Air Home Page");
+			// 	loginSuccess.add(mainLabel);
+			// 	System.out.println("-->" + username);
+			// 	JLabel welcomeLabel = new JLabel("안녕하세요 " + username + "님" );
+			// 	loginSuccess.add(welcomeLabel);
 				
+			// 	JButton LogoutButton = new JButton("Logout");
+			// 	LogoutButton.setPreferredSize(new Dimension(20,20));
+			// 	LogoutButton.addActionListener(this);
+			// 	loginSuccess.add(LogoutButton);
+				
+			// 	deckPanel.add("loginSuccess", loginSuccess);
+			// 	dealer.show(deckPanel, "loginSuccess"); 
+			// }
+			// else {
+			// 	JOptionPane.showMessageDialog(null, "일치하는 정보가 없습니다");	
+			// }
 			
 		}
 		else if (actionCommand.equals("ReservationC")) // 예약확인 버튼 클릭시에 입력 받은 정보 배열에 저장
@@ -560,21 +385,6 @@ public class Main extends JFrame implements ActionListener
 			reservationInfo[4] = arrivalDateR.getText();
 			reservationInfo[5] = number.getText();
 			reservationInfo[6] = grade.getText();
-
-			Airline airline = new Airline();
-
-        	try {
-				deckPanel.add("TicketsPanel" , TicketsPanel(airline.showFlights("./writeFile.txt") ,reservationInfo[1] , reservationInfo[2],reservationInfo[3] , reservationInfo[4],reservationInfo[5]));
-				dealer.show(deckPanel, "TicketsPanel");
-			} catch (NumberFormatException | IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-
-
-			
-
 		}
 		else if (actionCommand.equals("InquiryC")) // 예약 조회 확인 버튼 클릭시에  입력 받은 정보 배열에 저장
 		{
@@ -599,9 +409,7 @@ public class Main extends JFrame implements ActionListener
 			flightSearch.searchSchedule(scheduleInfo[1], scheduleInfo[2], scheduleInfo[3], scheduleInfo[4]);
 		}
 		else if (actionCommand.equals("Logout")) {
-			// dealer.show(deckPanel, "homepanel");
-			deckPanel.add("homepanel", homePanel(""));
-			dealer.show(deckPanel, "homepanel"); 
+			dealer.show(deckPanel, "main");
 		}
 		else if(e.getSource() ==flightAdditionButton){
 			createFlight(FlightName.getText() , capacity.getText() , startDate.getText() , endDate.getText() , startLocation.getText() , endLocation.getText() );
@@ -656,4 +464,3 @@ public void createFlight(String FlightName, String capacity ,String startDate ,S
 		}	
 		}
 }
-

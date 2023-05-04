@@ -37,6 +37,10 @@ public class LoginForm extends JFrame implements ActionListener{
         password = new JTextField("비밀번호를 입력하세요", 30);
         main.add(password);
         Dimension btnSize = new Dimension(30 ,25);
+        JButton SumbitButton = new JButton("로그인 하기");
+        SumbitButton.addActionListener(this);
+
+
         JButton RegisterButton = new JButton("Register");
         RegisterButton.setPreferredSize(new Dimension(20,20));
         RegisterButton.addActionListener(this);
@@ -46,7 +50,7 @@ public class LoginForm extends JFrame implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
         String actionCommand = e.getActionCommand( );
-        if (actionCommand.equals("MainC")) //로그인 버튼 클릭시에 로그인 true로 변경
+        if (actionCommand.equals("SumbitButton")) //로그인 버튼 클릭시에 로그인 true로 변경
         {
             System.out.println("preseed");
             Login login = new Login(ID.getText(), password.getText());

@@ -1,5 +1,4 @@
 import form.*;
-import func.user.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,9 +10,9 @@ public class Main extends JFrame implements ActionListener
 	public static final int HEIGHT = 1000;
 	private Boolean isLogined = false; // 로그인 유무
 	
-	
 	private CardLayout dealer;
 	private JPanel deckPanel;
+	
 	LoginForm loginForm = new LoginForm();
 	RegisterForm registerForm = new RegisterForm();
 	ReservationForm reservationForm = new ReservationForm();
@@ -24,7 +23,7 @@ public class Main extends JFrame implements ActionListener
 
 	User user = new User();
 
-	public Main( )
+	public Main()
 	{
 
 		setSize(WIDTH, HEIGHT);
@@ -71,7 +70,7 @@ public class Main extends JFrame implements ActionListener
 
 		
 		// 버튼 판넬 1 시작
-		JPanel buttonPanel1 = new JPanel( );
+		JPanel buttonPanel1 = new JPanel();
 		buttonPanel1.setBackground(Color.BLACK);
 		buttonPanel1.setLayout(new FlowLayout( ));
 		
