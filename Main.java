@@ -135,9 +135,9 @@ public class Main extends JFrame implements ActionListener
 		reservation.add(departureDateR);
 		arrivalDateR = new JTextField("오는 날을 입력하세요 (ex.1999/7/6)", 10);
 		reservation.add(arrivalDateR);
-		number = new JTextField("인원 입력", 10);
-		reservation.add(number);
-		grade = new JTextField("좌석 등급을 입력하세요 (1.일반석 2.프레스티지석 3.일등석)", 10);
+		// number = new JTextField("인원 입력", 10);
+		// reservation.add(number);
+		grade = new JTextField("좌석 등급을 입력하세요 ( 1.전체 , 2.이코노미 , 3.비지니스 , 4.퍼스트 )", 10);
 		reservation.add(grade);
 			deckPanel.add("reservation", reservation);
 		// 예약화면 종료
@@ -393,7 +393,7 @@ public class Main extends JFrame implements ActionListener
 										
 										return panel;
 									}
-									private JPanel TicketsPanel(ArrayList<Ticket> tickets,   String capacityFT, String fromDateFT , String toDateFT, String fromLocationFT ,String toLocationFT){
+									private JPanel TicketsPanel(ArrayList<Ticket> tickets, String fromDateFT , String toDateFT, String fromLocationFT ,String toLocationFT, String gradeFT){
 										
 										JPanel TicketsPanel = new JPanel( );
 										TicketsPanel.setLayout(new GridLayout( 3, 3, 10, 10));
@@ -401,31 +401,64 @@ public class Main extends JFrame implements ActionListener
 										String[][] ticketContents = new String[300][7];
 										System.out.println(tickets.size());
 										// TicketsPanel.add(LongButtonExample("항공기 정보" , "출발지" , "도착지" , "출발일자" , "도착일자" , "인원", "좌석등급"));
-										for(int i = 0 ; i < tickets.size() ; ++i){
-											// Filtering
-											if(fromLocationFT.equals(tickets.get(i).getFromLocation())  
-											&& toLocationFT.equals(tickets.get(i).getToLocation())  &&
-											fromDateFT.equals(tickets.get(i).getFromDate()) && 
-											toDateFT.equals(tickets.get(i).getToDate()) 
-											){
+										
+										if(gradeFT.equals("비지니스") || gradeFT.equals("퍼스트") || gradeFT.equals("이코노미")){
+											for(int i = 0 ; i < tickets.size() ; ++i){
+										
+												// Filtering
+												if(fromLocationFT.equals(tickets.get(i).getFromLocation())  
+												&& toLocationFT.equals(tickets.get(i).getToLocation())  &&
+												fromDateFT.equals(tickets.get(i).getFromDate()) && 
+												toDateFT.equals(tickets.get(i).getToDate()) &&
+												gradeFT.equals(tickets.get(i).getSeat())
+												){
+													
+													Ticket ticket = tickets.get(i);
+	
+													ticketContents[i][0] = ticket.getAirplane();
+													ticketContents[i][1] = ticket.getFromLocation();
+													ticketContents[i][2] = ticket.getToLocation();
+													ticketContents[i][3] = ticket.getFromDate();
+													ticketContents[i][4] = ticket.getToDate();
+													ticketContents[i][5] =  ticket.getCapacity();
+													ticketContents[i][6] = ticket.getSeat();
+													
+													TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6]));
+	
+												}
+	
 												
-												Ticket ticket = tickets.get(i);
-
-												ticketContents[i][0] = ticket.getAirplane();
-												ticketContents[i][1] = ticket.getFromLocation();
-												ticketContents[i][2] = ticket.getToLocation();
-												ticketContents[i][3] = ticket.getFromDate();
-												ticketContents[i][4] = ticket.getToDate();
-												ticketContents[i][5] =  ticket.getCapacity();
-												ticketContents[i][6] = ticket.getSeat();
 												
-												TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6]));
-
-											}
-
+											}	
+										} else{
+											for(int i = 0 ; i < tickets.size() ; ++i){
+										
+												// Filtering
+												if(fromLocationFT.equals(tickets.get(i).getFromLocation())  
+												&& toLocationFT.equals(tickets.get(i).getToLocation())  &&
+												fromDateFT.equals(tickets.get(i).getFromDate()) && 
+												toDateFT.equals(tickets.get(i).getToDate())
+												){
+													
+													Ticket ticket = tickets.get(i);
+	
+													ticketContents[i][0] = ticket.getAirplane();
+													ticketContents[i][1] = ticket.getFromLocation();
+													ticketContents[i][2] = ticket.getToLocation();
+													ticketContents[i][3] = ticket.getFromDate();
+													ticketContents[i][4] = ticket.getToDate();
+													ticketContents[i][5] =  ticket.getCapacity();
+													ticketContents[i][6] = ticket.getSeat();
+													
+													TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6]));
+	
+												}
+	
+												
+												
+											}	
+										}
 											
-											
-										}	
 
 										return TicketsPanel;
 									}
@@ -604,12 +637,12 @@ public class Main extends JFrame implements ActionListener
 							// ReservationForm rf = new ReservationForm();
 							// rf.
 							reservationInfo[0] = kindOfTicketR.getText();
-							reservationInfo[1] = number.getText();
-							reservationInfo[2] = departureDateR.getText();
-							reservationInfo[3] = arrivalDateR.getText();
-							reservationInfo[4] = departureR.getText();
-							reservationInfo[5] = arrivalR.getText();
-							reservationInfo[6] = grade.getText();
+							// reservationInfo[1] = number.getText();
+							reservationInfo[1] = departureDateR.getText();
+							reservationInfo[2] = arrivalDateR.getText();
+							reservationInfo[3] = departureR.getText();
+							reservationInfo[4] = arrivalR.getText();
+							reservationInfo[5] = grade.getText();
 
 							Airline airline = new Airline();
 
