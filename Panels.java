@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
@@ -17,9 +16,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Main extends JFrame implements ActionListener
-{
-	public static final int WIDTH = 800;
+public class Panels extends JFrame implements ActionListener{
+    public static final int WIDTH = 600;
 	public static final int HEIGHT = 500;
 	
 	private String [] reservationInfo = new String[7]; // 항공권예매 정보
@@ -55,263 +53,30 @@ public class Main extends JFrame implements ActionListener
 	private JTextField birthday;
 	private String username = "";
 
+	
+	
 	private JTextField FlightName;
     private JTextField capacity;
-    private JTextField fromDate;
-    private JTextField toDate;
-    private JTextField fromLocation;
-    private JTextField toLocation;
+    private JTextField startDate;
+    private JTextField endDate;
+    private JTextField startLocation;
+    private JTextField endLocation;
 
 	
 	private JButton flightAdditionButton;
 
+    public Panels(){
+    }
 
-	public Main( )
-	{
-		setSize(WIDTH, HEIGHT);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setTitle("Ticketing system");
-		Container contentPane = getContentPane( );
-		contentPane.setLayout(new BorderLayout());
-	
-		deckPanel = new JPanel( );
-		dealer = new CardLayout( );
-		deckPanel.setLayout(dealer);
-
-		deckPanel.add("homepanel", homePanel(("")));
-		deckPanel.add("loginPanel", loginPanel());
-		deckPanel.add("register", Register());
-		deckPanel.add("TicketsPanel" , TicketsPanel("Scheduel",new ArrayList<>() , "" , "" , "" , "" ,""));
-		deckPanel.add("managerPanel" , managerPanel());
-		deckPanel.add("reservation", reservationPanel());
-		deckPanel.add("inquiry", inpuiryPanel());
-		deckPanel.add("checkin", checkInPanel());
-		deckPanel.add("loginSuccess", LoginSuccessPanel());
-		deckPanel.add("schedulePanel" ,scheduelPanel());
-
-		contentPane.add(deckPanel, BorderLayout.CENTER);
-
-		contentPane.add(ButtonPanel1(), BorderLayout.NORTH);
-		contentPane.add(ButtonPanel2(), BorderLayout.SOUTH);
-			dealer.first(deckPanel);
-		}
-
-
-		
-	
-	// 버튼 눌렸을 떄 처리
-	public void actionPerformed(ActionEvent e)
-	{
-		String actionCommand = e.getActionCommand( );
-		
-		if (actionCommand.equals("Home")) dealer.show(deckPanel, "homepanel"); // 화면전환
-		else if (actionCommand.equals("Login")) {
-			
-			dealer.show(deckPanel, "loginPanel"); // 화면전환
-		}
-		else if (actionCommand.equals("Reservation")){
-			dealer.show(deckPanel, "reservation"); //화면전환
-		} 
-		else if (actionCommand.equals("Inquiry")){
-			if(!isLogined) dealer.show(deckPanel, "inquiry"); //화면전환
-		} 
-		else if (actionCommand.equals("checkIn")){
-			if(!isLogined) dealer.show(deckPanel, "checkin"); // 화면전환
-		} 
-		else if (actionCommand.equals("Schedule")){
-			dealer.show(deckPanel, "schedulePanel"); //화면전환	
-		} 
-		else if (actionCommand.equals("Register")) {
-			dealer.show(deckPanel, "register");
-		}
-		else if(actionCommand.equals("doRegister")) {
-			User user = User.getUser();
-			boolean isSuccessed = user.register(regID.getText(), regPW.getText(),regName.getText(), birthday.getText() , "./member.text");
-			// Register register = new Register(regID.getText(), regPW.getText(),regName.getText(), birthday.getText());
-			if( isSuccessed == true) {
-				JOptionPane.showMessageDialog(null, "회원가입에 성공하셨습니다");
-				loginPanel();
-				dealer.show(deckPanel, "loginPanel"); // 화면전환
-			}
-			else {
-				JOptionPane.showMessageDialog(null, "회원가입에 실패하였습니다");	
-			}
-			
-		}
-		else if(actionCommand.equals("Manager")){
-			
-			deckPanel.add("managerPanel" , managerPanel());
-			dealer.show(deckPanel , "managerPanel");
-		}
-		
-
-			else if(actionCommand.equals("예약ECO")){
-
-				IPayment payment = new EconomyPayment();
-				JOptionPane.showMessageDialog(null, payment.payment());
-				
-				
-				User user = User.getUser();
-				deckPanel.add("homepanel", homePanel(user.getName()));
-				dealer.show(deckPanel, "homepanel"); 
-				
-
-			}
-			else if(actionCommand.equals("예약BUS")){
-
-				IPayment payment = new BusinessPayment();
-				JOptionPane.showMessageDialog(null, payment.payment());
-
-				User user = User.getUser();
-				deckPanel.add("homepanel", homePanel(user.getName()));
-				dealer.show(deckPanel, "homepanel"); 
-				
-			}
-			else if(actionCommand.equals("예약FIR")){
-
-				IPayment payment = new FirstPayment();
-				JOptionPane.showMessageDialog(null, payment.payment());
-				
-
-
-				User user = User.getUser();
-				deckPanel.add("homepanel", homePanel(user.getName()));
-				dealer.show(deckPanel, "homepanel"); 
-				
-			}
-			else if(actionCommand.equals("비행 정보 제출")){
-				Manager manager = new Manager();
-				manager.createFlight(FlightName.getText(), fromLocation.getText() , toLocation.getText() , fromDate.getText() , toDate.getText() , capacity.getText() ,grade.getText() );
-
-				User user = User.getUser();
-				deckPanel.add("homepanel", homePanel(user.getName()));
-				dealer.show(deckPanel, "homepanel"); 
-			}
-			else if(actionCommand.equals("닫기")){
-				User user = User.getUser();
-				deckPanel.add("homepanel", homePanel(user.getName()));
-				dealer.show(deckPanel, "homepanel"); 
-			}
-		else if (actionCommand.equals("doLogin")) //로그인 버튼 클릭시에 로그인 true로 변경
-		{
-			System.out.println("preseed");
-
-			User user = User.getUser();
-			// Airline airline = new Airline();
-			System.out.println(ID.getText() +password.getText() +"preseed");
-			if(user.login("./member.txt" , ID.getText(), password.getText())){
-				JOptionPane.showMessageDialog(null, "로그인에 성공하였습니다.");
-				System.out.println("성공");
-				dealer.show(deckPanel , "register");
-				deckPanel.add("homepanel", homePanel(user.getName()));
-				dealer.show(deckPanel, "homepanel"); 
-			} else{
-				JOptionPane.showMessageDialog(null, "로그인 정보가 일치하지 않습니다.");
-				System.out.println("실패");
-			}
-		}
-						else if (actionCommand.equals("ReservationC")) // 예약확인 버튼 클릭시에 입력 받은 정보 배열에 저장
-						{
-							// ReservationForm rf = new ReservationForm();
-							// rf.
-							reservationInfo[0] = kindOfTicketR.getText();
-							// reservationInfo[1] = number.getText();
-							reservationInfo[1] = departureDateR.getText();
-							reservationInfo[2] = arrivalDateR.getText();
-							reservationInfo[3] = departureR.getText();
-							reservationInfo[4] = arrivalR.getText();
-							reservationInfo[5] = grade.getText();
-
-							Airline airline = new Airline();
-
-							try {
-								deckPanel.add("TicketsPanel" , TicketsPanel("reservation" , airline.showFlights("./writeFile.txt") ,reservationInfo[1] , reservationInfo[2],reservationInfo[3] , reservationInfo[4],reservationInfo[5]));
-								
-								dealer.show(deckPanel, "TicketsPanel");
-								
-							} catch (NumberFormatException | IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-
-						}
-		else if (actionCommand.equals("InquiryC")) // 예약 조회 확인 버튼 클릭시에  입력 받은 정보 배열에 저장
-		{
-			veiwInfo[0] = ticketnum.getText();
-			veiwInfo[1] = departureDateR.getText();
-			veiwInfo[2] = name.getText();
-		}
-		else if (actionCommand.equals("checkInC")) // 체크인확인 버튼 클릭시에 입력 받은 정보 배열에 저장
-		{
-			checkInInfo[0] = ticketnum.getText();
-			checkInInfo[1] = departureDateC.getText();
-			checkInInfo[2] = name.getText();
-		}
-		else if (actionCommand.equals("ScheduleC")) //현황 조회 확인 버튼 클릭시에 입력 받은 정보 배열에 저장
-		{
-			Airline airline = new Airline();
-			// scheduleInfo[0] = kindOfTicketS.getText();
-			scheduleInfo[1] = departureS.getText();
-			scheduleInfo[2] = arrivalS.getText();
-			scheduleInfo[3] = fromDate.getText();
-			scheduleInfo[4] = toDate.getText();
-			try {
-				deckPanel.add("TicketsPanel" , TicketsPanel("schedule" , airline.showFlights("./writeFile.txt") , scheduleInfo[3],scheduleInfo[4], scheduleInfo[1],scheduleInfo[2]  , "전체"));
-
-			dealer.show(deckPanel, "TicketsPanel");
-			} catch (NumberFormatException | IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			// FlightSearch flightSearch = new FlightSearch();
-			// flightSearch.searchSchedule(scheduleInfo[1], scheduleInfo[2], scheduleInfo[3], scheduleInfo[4]);
-		}
-		else if (actionCommand.equals("Logout")) {
-			// dealer.show(deckPanel, "homepanel");
-			deckPanel.add("homepanel", homePanel(""));
-			dealer.show(deckPanel, "homepanel"); 
-		}
-		else if(e.getSource() ==flightAdditionButton){
-			Manager manager = new Manager();
-			manager.createFlight(FlightName.getText() , fromLocation.getText() , toLocation.getText() , fromDate.getText() , toDate.getText() ,capacity.getText(), grade.getText());
-		}
-		
-	
-	}
-
-	public static void main(String[] args)
-	{
-		Main demoGui = new Main( ); demoGui.setVisible(true);
-	}	
-
-	public void nonMemberVarification(String page){
-		switch(page){
-			case "Reservation":
-			break;
-			case "checkIn":
-				dealer.show(deckPanel, "inquiry");
-			break;
-			case "Inquiry":
-				dealer.show(deckPanel, "inquiry");
-			break;
-
-		}	
-}
-
-
-
-//
-
-
-private JPanel ButtonPanel1(){
+    
+public JPanel ButtonPanel1(){
 	JPanel buttonPanel1 = new JPanel( );
-buttonPanel1.setBackground(Color.BLACK);
-buttonPanel1.setLayout(new FlowLayout( ));
+    buttonPanel1.setBackground(Color.BLACK);
+    buttonPanel1.setLayout(new FlowLayout( ));
 
-JButton mainButton = new JButton("Home");
-mainButton.addActionListener(this);
-buttonPanel1.add(mainButton);
+    JButton mainButton = new JButton("Main");
+    mainButton.addActionListener(this);
+    buttonPanel1.add(mainButton);
 
 JButton reserButton = new JButton("Reservation");
 reserButton.addActionListener(this);
@@ -461,10 +226,10 @@ departureS = new JTextField("출발지를 입력하세요", 10);
 schedule.add(departureS);
 arrivalS = new JTextField("도착지를 입력하세요", 10);
 schedule.add(arrivalS);
-fromDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
-schedule.add(fromDate);
-toDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
-schedule.add(toDate);
+startDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
+schedule.add(startDate);
+endDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
+schedule.add(endDate);
 
 return schedule;
 }
@@ -488,7 +253,7 @@ regPW = new JTextField("PW", 30);
 register.add(regPW);	
 birthday = new JTextField("birthday", 30);
 register.add(birthday);
-JButton registerButton = new JButton("doRegister");
+JButton registerButton = new JButton("register");
 registerButton.setPreferredSize(btnSize);
 registerButton.addActionListener(this);
 register.add(registerButton);
@@ -633,17 +398,17 @@ manager.setBackground(Color.LIGHT_GRAY);
 JLabel managerLabel = new JLabel("Manager Page");
 FlightName = new JTextField("비행기 정보를 입력하세요", 20);
 capacity = new JTextField("인원을 입력하세요" , 5);
-fromDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
-toDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
-fromLocation = new JTextField("출발지를 입력하세요" , 20);
-toLocation = new JTextField("도착지를 입력하세요" , 20);
+startDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
+endDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
+startLocation = new JTextField("출발지를 입력하세요" , 20);
+endLocation = new JTextField("도착지를 입력하세요" , 20);
 grade = new JTextField("클래스를 입력해주세요" ,20);
 manager.add(managerLabel);
 manager.add(FlightName);
-manager.add(fromLocation);
-manager.add(toLocation);
-manager.add(fromDate);
-manager.add(toDate);
+manager.add(startLocation);
+manager.add(endLocation);
+manager.add(startDate);
+manager.add(endDate);
 manager.add(capacity);
 manager.add(grade);
 
@@ -666,7 +431,7 @@ loginPanel.add(ID);
 password = new JTextField("비밀번호를 입력하세요", 30);
 loginPanel.add(password);
 Dimension btnSize = new Dimension(30 ,25);
-JButton checkLogin = new JButton("doLogin");
+JButton checkLogin = new JButton("확인");
 checkLogin.setPreferredSize(new Dimension(20,20));
 checkLogin.addActionListener(this);
 loginPanel.add(checkLogin);
