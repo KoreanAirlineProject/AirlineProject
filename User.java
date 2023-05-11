@@ -7,11 +7,14 @@ import java.io.PrintWriter;
 
 public class User {
 
+
     private static User user = null;
 
     private User(){
-        
+    
     }
+
+    
 
     public void setUser(String id, String password , String name , String birthDate) {
         this.id = id;

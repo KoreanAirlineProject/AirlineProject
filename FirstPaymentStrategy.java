@@ -1,5 +1,5 @@
 
-public class FirstPayment implements IPayment{
+class FirstPaymentStrategy implements PaymentStrategy{
 
     private int price = 200000;
 

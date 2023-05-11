@@ -1,4 +1,4 @@
-public interface IPayment {
+public interface PaymentStrategy {
 
     public String payment();   
 

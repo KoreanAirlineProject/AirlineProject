@@ -1,4 +1,4 @@
-public class BusinessPayment implements IPayment{
+public class BusinessPaymentStrategy implements PaymentStrategy{
 
     private int price = 150000;    
 

@@ -1,5 +1,6 @@
-public class EconomyPayment implements IPayment{
+class EconomyPaymentStrategy implements PaymentStrategy{
 
+    
     private int price = 100000;
 
     @Override
