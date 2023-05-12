@@ -132,7 +132,8 @@ public class User {
 	}
 
     public void logout(User user) { }
-    public void verification(User user) {  }
+    public void verification(User user) {     
+    }
 
     public boolean register(String id , String password , String name , String birthday , String fname) { 
         System.out.println("id: " + id + " pw:  " + password + " name: " + name + " birthday: " + birthday);
