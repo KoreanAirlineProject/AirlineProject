@@ -222,7 +222,7 @@ public class Main extends JFrame implements ActionListener
 			veiwInfo[2] = name.getText();
 
 			user.setName(veiwInfo[2]);
-			
+
 			JOptionPane.showMessageDialog(null , "인증되었습니다.");
 			dealer.show(deckPanel,"homepanel");
 		}
@@ -539,6 +539,33 @@ button = new JButton("예약");
 button.addActionListener(new ActionListener() {
 	public void actionPerformed(ActionEvent e){
 		
+		Reservation reservation = null;
+
+		
+		int option = JOptionPane.showOptionDialog(
+            null,
+            "어떤 결제 수단으로 결재하시겠습니까?",
+            "결제 수단",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            new String[] {"카드", "삼성페이"},
+            "카드"
+        );
+        if(option == -1) return;
+        else if (option == JOptionPane.YES_OPTION) {
+            // 파일을 저장하는 코드 작성
+
+		reservation = new Reservation( new CardPaymentMethodStrategy());
+			if(!reservation.PaymentMethod()) return ;
+
+        } else {
+            // 저장하지 않고 종료하는 코드 작성
+			reservation = new Reservation(new accountPaymentMethodStrategy());
+
+			if(!reservation.PaymentMethod()) return;
+			// System.out.println("계좌이체 스트레티지");
+        }
 		// 각 표를 보고 예약을 할 수 있는 이벤트 , 각 표에 대한 정보를 필요로 하기 때문에 콜백 함수로 처리하였음.
 
 		// 필요한 객체 생성
@@ -548,7 +575,6 @@ button.addActionListener(new ActionListener() {
 		Ticket reservedTicket = new Ticket(info1,info2,info3,info4,info5,info6,info7);
 		
 		// 예약 객체 생성
-		Reservation reservation = new Reservation(null);
 
 		// label7 은 좌석등급
 		// 좌석등급별로 reservation에 다른 payment 전략을 적용함.

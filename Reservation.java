@@ -4,10 +4,26 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Reservation {
-    private final PaymentStrategy paymentStrategy;
+    private PaymentStrategy paymentStrategy;
+    private PaymentMethodStrategy paymentMethodStrategy;
 
-    Reservation(PaymentStrategy paymentStrategy){
+
+     Reservation(PaymentMethodStrategy paymentMethodStrategy){
+        this.paymentMethodStrategy = paymentMethodStrategy;
+    }
+
+     Reservation(PaymentStrategy paymentStrategy){
+        
         this.paymentStrategy = paymentStrategy;
+    }
+
+     Reservation(PaymentStrategy paymentStrategy, PaymentMethodStrategy paymentMethodStrategy){
+        this.paymentMethodStrategy = paymentMethodStrategy;
+        this.paymentStrategy = paymentStrategy;
+    }
+
+    public boolean PaymentMethod(){
+        return paymentMethodStrategy.PaymentMethod();
     }
 
     public String payment(Ticket ticket){
