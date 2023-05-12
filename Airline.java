@@ -38,8 +38,6 @@ public class Airline {
         
             br = new BufferedReader(new FileReader(fname));
             String line;
-        
-
             
                 while((line = br.readLine()) != null) {
                     // line = br.readLine();

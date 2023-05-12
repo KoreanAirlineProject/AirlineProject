@@ -1,6 +1,6 @@
 import javax.swing.JOptionPane;
 
-class accountPaymentMethodStrategy implements PaymentMethodStrategy {
+class SamsungPaymentMethodStrategy implements PaymentMethodStrategy {
 
     @Override
     public boolean PaymentMethod() {
