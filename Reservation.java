@@ -1,7 +1,11 @@
 import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.io.FileWriter;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.StringJoiner;
+
 
 public class Reservation {
     private PaymentStrategy paymentStrategy;
@@ -41,7 +45,7 @@ public class Reservation {
 			BufferedWriter bw = new BufferedWriter(new FileWriter("ticketList.txt", true));
             PrintWriter pw = new PrintWriter(bw, true);
             
-            pw.write(reservationNum + ";" + user.getName() + ";" + ticket.getAirplane() + ";" + ticket.getFromLocation() + ";" + ticket.getToLocation() + ";" + ticket.getFromDate() + ";" +ticket.getToDate() + ";" + ticket.getCapacity() + ";" + ticket.getSeat() + "\n");
+            pw.write(reservationNum + ";" + user.getName() + ";" + ticket.getAirplane() + ";" + ticket.getFromLocation() + ";" + ticket.getToLocation() + ";" + ticket.getFromDate() + ";" +ticket.getToDate() + ";" + ticket.getCapacity() + ";" + ticket.getSeat() + "/" + "\n");
 
             pw.flush();
             pw.close();
@@ -53,5 +57,8 @@ public class Reservation {
         }
         
     }
+
+    
+
 
 }
