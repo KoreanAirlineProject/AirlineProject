@@ -48,7 +48,9 @@ public class Main extends JFrame implements ActionListener
 	private JTextField grade; // 좌석 등급 입력을 위한 객체
 	private JTextField ID; // ID 입력을 위한 객체
 	private JTextField ticketnum; // 티켓 번호 입력을 위한 객체
+	private JTextField ticketnumC; // 티켓 번호 입력을 위한 객체
 	private JTextField name; // 승객이름 입력을 위한 객체
+	private JTextField nameC; // 승객이름 입력을 위한 객체
 	private JTextField password; // password 입력을 위한 객체
 	private JTextField regName;
 	private JTextField regID;
@@ -100,7 +102,7 @@ public class Main extends JFrame implements ActionListener
 		contentPane.add(ButtonPanel1(), BorderLayout.NORTH);
 		contentPane.add(ButtonPanel2(), BorderLayout.SOUTH);
 			dealer.first(deckPanel);
-		}
+	}
 
 
 		
@@ -143,7 +145,7 @@ public class Main extends JFrame implements ActionListener
 			// User user = User.getUser();
 			boolean isSuccessed = user.register(regID.getText(), regPW.getText(),regName.getText(), birthday.getText() , "./member.txt");
 			// Register register = new Register(regID.getText(), regPW.getText(),regName.getText(), birthday.getText());
-			if( isSuccessed == true) {
+			if(isSuccessed == true) {
 				JOptionPane.showMessageDialog(null, "회원가입에 성공하셨습니다");
 				loginPanel();
 				dealer.show(deckPanel, "loginPanel"); // 화면전환
@@ -271,11 +273,15 @@ public class Main extends JFrame implements ActionListener
 
 			
 		}
-		else if (actionCommand.equals("CheckInC")) // 체크인확인 버튼 클릭시에 입력 받은 정보 배열에 저장
+		else if (actionCommand.equals("checkInC")) // 체크인확인 버튼 클릭시에 입력 받은 정보 배열에 저장
 		{
-			checkInInfo[0] = ticketnum.getText();
+			checkInInfo[0] = ticketnumC.getText();
 			checkInInfo[1] = departureDateC.getText();
-			checkInInfo[2] = name.getText();
+			checkInInfo[2] = nameC.getText();
+
+			CheckIn check = new CheckIn(checkInInfo);
+			check.searchCheckInInfo();
+
 
 		}
 		else if (actionCommand.equals("ScheduleC")) //현황 조회 확인 버튼 클릭시에 입력 받은 정보 배열에 저장
@@ -422,12 +428,12 @@ private JPanel checkInPanel() {
 	checkin.setBackground(Color.LIGHT_GRAY);
 	JLabel checkLabel = new JLabel("Check-in");
 	checkin.add(checkLabel);
-	// ticketnum = new JTextField("예약 번호를 입력하세요", 10);
-	// checkin.add(ticketnum);
-	// departureDateC = new JTextField("탑승일을 입력하세요 (ex.1999/7/6)", 10);
-	// checkin.add(departureDateC);
-	// name = new JTextField("승객의 이름을 입력하세요", 10);
-	// checkin.add(name);
+	ticketnumC = new JTextField("예약 번호를 입력하세요", 10);
+	checkin.add(ticketnumC);
+	departureDateC = new JTextField("탑승일을 입력하세요 (ex.1999/7/6)", 10);
+	checkin.add(departureDateC);
+	nameC = new JTextField("승객의 이름을 입력하세요", 10);
+	checkin.add(nameC);
 
 	return checkin;
 }
@@ -618,7 +624,7 @@ button.addActionListener(new ActionListener() {
 
         } else {
             // 저장하지 않고 종료하는 코드 작성
-			reservation = new Reservation(new accountPaymentMethodStrategy());
+			reservation = new Reservation(new SamsungPaymentMethodStrategy());
 
 			if(!reservation.PaymentMethod()) return;
 			// System.out.println("계좌이체 스트레티지");
