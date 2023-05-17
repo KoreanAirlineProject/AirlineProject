@@ -237,7 +237,7 @@ public class Main extends JFrame implements ActionListener
 							reservationInfo[2] = arrivalDateR.getText();
 							reservationInfo[3] = departureR.getText();
 							reservationInfo[4] = arrivalR.getText();
-							reservationInfo[5] = grade.getToolTipText();
+							reservationInfo[5] = grade.getSelectedItem().toString();
 
 							Airline airline = new Airline();
 
