@@ -5,7 +5,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-
+// 805 번째 줄 에러떠서 주석처리함
 
 // import form.ReservationForm;
 
@@ -31,7 +31,7 @@ public class Main extends JFrame implements ActionListener
 	
 	
 	private CardLayout dealer;
-	private JPanel deckPanel;
+	private JPanel deckPanel, homePanel, loginSuccess, checkin, nonMemberVerificationPenel, inquiry, checkrv, reservation, schedule, register, TicketsPanel;
 	
 	private JTextField kindOfTicketR; // 예약에서 티켓종류 입력을 위한 객체
 	private JTextField kindOfTicketS; // 현황에서 티켓종류 입력을 위한 객체
@@ -45,7 +45,9 @@ public class Main extends JFrame implements ActionListener
 	private JTextField departureDateC; // 체크인에서 탑승일 입력을 위한 객체
 	private JTextField departureDateS; // 현황조회에서 탑승일 입력을 위한 객체 
 	private JTextField number; // 인원 수 입력을 위한 객체
-	private JTextField grade; // 좌석 등급 입력을 위한 객체
+
+	// private JTextField grade; // 좌석 등급 입력을 위한 객체
+	private JComboBox<String> grade;
 	private JTextField ID; // ID 입력을 위한 객체
 	private JTextField ticketnum; // 티켓 번호 입력을 위한 객체
 	private JTextField ticketnumC; // 티켓 번호 입력을 위한 객체
@@ -68,6 +70,9 @@ public class Main extends JFrame implements ActionListener
 	
 	private JButton flightAdditionButton;
 	Ticket ticket;
+	private String[] grades = {"전체" , "이코노미" , "비지니스" , "퍼스트"};
+	private Color color;
+    private boolean isDarkMode = false;
 	
 
 	public Main( )
@@ -120,10 +125,38 @@ public class Main extends JFrame implements ActionListener
 		String actionCommand = e.getActionCommand( );
 		
 		if (actionCommand.equals("Home")) dealer.show(deckPanel, "homepanel"); // 화면전환
+	
 		else if (actionCommand.equals("Login")) {
 			
 			dealer.show(deckPanel, "loginPanel"); // 화면전환
 		}
+		else if (actionCommand.equals("DarkMode")) {	
+			button btn = new button();
+				if(isDarkMode) {
+					Off off = new Off();
+					btn.setButtonState(off);
+					color = btn.buttonClick();
+					isDarkMode = !isDarkMode;
+					System.out.println("isDarkMode: "+ isDarkMode);
+					System.out.println("color: "+ color);
+
+				}
+				else {
+					On on = new On();
+					btn.setButtonState(on);
+					color = btn.buttonClick();
+					isDarkMode = !isDarkMode;
+					System.out.println("isDarkMode: "+ isDarkMode);
+					System.out.println("color: "+ color);
+			
+				}
+                
+				deckPanel.setBackground(color);
+				deckPanel.repaint();
+					
+       
+    }
+			
 		else if (actionCommand.equals("Reservation")){
 			dealer.show(deckPanel, "reservation"); //화면전환
 		} 
@@ -163,7 +196,7 @@ public class Main extends JFrame implements ActionListener
 	
 			else if(actionCommand.equals("비행 정보 제출")){
 				Manager manager = new Manager();
-				manager.createFlight(FlightName.getText(), fromLocation.getText() , toLocation.getText() , fromDate.getText() , toDate.getText() , capacity.getText() ,grade.getText() );
+				manager.createFlight(FlightName.getText(), fromLocation.getText() , toLocation.getText() , fromDate.getText() , toDate.getText() , capacity.getText() ,grade.getToolTipText() );
 
 				// User user = User.getUser();
 				deckPanel.add("homepanel", homePanel(user.getName()));
@@ -204,7 +237,7 @@ public class Main extends JFrame implements ActionListener
 							reservationInfo[2] = arrivalDateR.getText();
 							reservationInfo[3] = departureR.getText();
 							reservationInfo[4] = arrivalR.getText();
-							reservationInfo[5] = grade.getText();
+							reservationInfo[5] = grade.getToolTipText();
 
 							Airline airline = new Airline();
 
@@ -310,8 +343,10 @@ public class Main extends JFrame implements ActionListener
 		}
 		else if(e.getSource() ==flightAdditionButton){
 			Manager manager = new Manager();
-			manager.createFlight(FlightName.getText() , fromLocation.getText() , toLocation.getText() , fromDate.getText() , toDate.getText() ,capacity.getText(), grade.getText());
+			manager.createFlight(FlightName.getText() , fromLocation.getText() , toLocation.getText() , fromDate.getText() , toDate.getText() ,capacity.getText(), grade.getToolTipText());
 		}
+		
+		
 		
 	
 	}
@@ -340,7 +375,7 @@ public class Main extends JFrame implements ActionListener
 private JPanel ButtonPanel1(){
 	JPanel buttonPanel1 = new JPanel( );
 buttonPanel1.setBackground(Color.BLACK);
-buttonPanel1.setLayout(new FlowLayout( ));
+buttonPanel1.setLayout(new FlowLayout());
 
 JButton mainButton = new JButton("Home");
 mainButton.addActionListener(this);
@@ -405,9 +440,9 @@ buttonPanel2.add(managerConfirm);
 private JPanel LoginSuccessPanel(){
 	User user = User.getUser();
 
-JPanel loginSuccess = new JPanel();
+loginSuccess = new JPanel();
 loginSuccess.setLayout(new GridLayout(0, 1, 10, 10));
-loginSuccess.setBackground(Color.LIGHT_GRAY);
+loginSuccess.setBackground(color);
 JLabel mainLabel = new JLabel("Korean Air Home Page");
 loginSuccess.add(mainLabel);
 System.out.println("-->" + user.getId());
@@ -423,9 +458,9 @@ return loginSuccess;
 }
 
 private JPanel checkInPanel() {
-	JPanel checkin = new JPanel();
+	checkin = new JPanel();
 	checkin.setLayout(new GridLayout(0, 1, 10, 10));
-	checkin.setBackground(Color.LIGHT_GRAY);
+	checkin.setBackground(color);
 	JLabel checkLabel = new JLabel("Check-in");
 	checkin.add(checkLabel);
 	ticketnumC = new JTextField("예약 번호를 입력하세요", 10);
@@ -440,22 +475,53 @@ private JPanel checkInPanel() {
 
 private JPanel NonMemberVerificationPanel(){
 
-	JPanel nonMemberVerificationPenel = new JPanel();
-	
-	nonMemberVerificationPenel.setLayout(new GridLayout(0, 1, 10, 10));
-	nonMemberVerificationPenel.setBackground(Color.LIGHT_GRAY);
-	JLabel checkLabel = new JLabel("비회원 정보를 입력해 주세요");
-	nonMemberVerificationPenel.add(checkLabel);
-	ticketnum = new JTextField("예약 번호를 입력하세요", 10);
-	nonMemberVerificationPenel.add(ticketnum);
-	departureDateI = new JTextField("탑승일을 입력하세요 (ex.1999/7/6)", 10);
-	nonMemberVerificationPenel.add(departureDateI);
-	name = new JTextField("승객의 이름을 입력하세요", 10);
-	nonMemberVerificationPenel.add(name);
+	JPanel  ticketNumPanel, depDatePanel, namePanel;
+	JLabel checkLabel,  ticketNumLabel, depDateLabel, nameLabel;
 
+    FlowLayout flowCenter = new FlowLayout(FlowLayout.CENTER);
+	nonMemberVerificationPenel = new JPanel(flowCenter);
+	nonMemberVerificationPenel.setLayout(new BoxLayout(nonMemberVerificationPenel, BoxLayout.Y_AXIS));
+	nonMemberVerificationPenel.setBackground(color);
+
+	JPanel pnlNorth = new JPanel(new GridLayout(0,1));
+
+	checkLabel = new JLabel("비회원 정보를 입력해 주세요");
+	checkLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+
+	ticketNumPanel = new JPanel();
+	ticketNumLabel = new JLabel("예약번호:");
+	ticketnum = new JTextField(15);
+	ticketNumPanel.add(ticketNumLabel);
+	ticketNumPanel.add(ticketnum);
+
+	depDatePanel = new JPanel();
+	depDateLabel = new JLabel("탑승일 (ex.1999/7/6):");
+	departureDateI = new JTextField(15);
+	depDatePanel.add(depDateLabel);
+	depDatePanel.add(departureDateI);
+
+	namePanel = new JPanel();
+	nameLabel = new JLabel("승객 이름:");
+	name = new JTextField(15);
+	namePanel.add(nameLabel);
+	namePanel.add(name);
+
+    pnlNorth.add(checkLabel);
+	pnlNorth.add(ticketNumPanel);
+	pnlNorth.add(depDatePanel);
+	pnlNorth.add(namePanel);
+
+	JPanel pnlSouth = new JPanel();
 	JButton nonMemberVerificationButton = new JButton("CheckNonMember");
 	nonMemberVerificationButton.addActionListener(this);
-	nonMemberVerificationPenel.add(nonMemberVerificationButton);
+	pnlSouth.add(nonMemberVerificationButton);
+
+	pnlNorth.setBorder(new EmptyBorder(20,20,0,20));
+	pnlSouth.setBorder(new EmptyBorder(0,0,10,0));
+
+	nonMemberVerificationPenel.add(pnlNorth, BorderLayout.NORTH);
+	nonMemberVerificationPenel.add(pnlSouth, BorderLayout.SOUTH);
+
 
 	return nonMemberVerificationPenel;
 	
@@ -463,23 +529,60 @@ private JPanel NonMemberVerificationPanel(){
 
 private JPanel inpuiryPanel(){
 
-	JPanel inquiry = new JPanel( );
-	inquiry.setLayout(new GridLayout(0, 1, 10, 10));
-	inquiry.setBackground(Color.LIGHT_GRAY);
-	JLabel inLabel = new JLabel("Inquiry");
-	inquiry.add(inLabel);
-	ticketnum = new JTextField("예약 번호를 입력하세요", 10);
-	inquiry.add(ticketnum);
-	departureDateI = new JTextField("탑승일을 입력하세요 (ex.1999/7/6)", 10);
-	inquiry.add(departureDateI);
-	name = new JTextField("승객의 이름을 입력하세요", 10);
-	inquiry.add(name);
+	JPanel  ticketNumPanel, depDatePanel, namePanel;
+	JLabel inLabel,  ticketNumLabel, depDateLabel, nameLabel;
+
+    FlowLayout flowCenter = new FlowLayout(FlowLayout.CENTER);
+	inquiry = new JPanel(flowCenter);
+	inquiry.setLayout(new BoxLayout(inquiry, BoxLayout.Y_AXIS));
+	inquiry.setBackground(color);
+
+	JPanel pnlNorth = new JPanel(new GridLayout(0,1));
+
+	inLabel = new JLabel("Inquiry");
+	inLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+
+	ticketNumPanel = new JPanel();
+	ticketNumLabel = new JLabel("예약번호:");
+	ticketnum = new JTextField(15);
+	ticketNumPanel.add(ticketNumLabel);
+	ticketNumPanel.add(ticketnum);
+
+	depDatePanel = new JPanel();
+	depDateLabel = new JLabel("탑승일 (ex.1999/7/6):");
+	departureDateI = new JTextField(15);
+	depDatePanel.add(depDateLabel);
+	depDatePanel.add(departureDateI);
+
+	namePanel = new JPanel();
+	nameLabel = new JLabel("승객 이름:");
+	name = new JTextField(15);
+	namePanel.add(nameLabel);
+	namePanel.add(name);
+
+    pnlNorth.add(inLabel);
+	pnlNorth.add(ticketNumPanel);
+	pnlNorth.add(depDatePanel);
+	pnlNorth.add(namePanel);
+
+	JPanel pnlSouth = new JPanel();
+	JButton nonMemberVerificationButton = new JButton("CheckNonMember");
+	nonMemberVerificationButton.addActionListener(this);
+	pnlSouth.add(nonMemberVerificationButton);
+
+	pnlNorth.setBorder(new EmptyBorder(20,20,0,20));
+	pnlSouth.setBorder(new EmptyBorder(0,0,10,0));
+
+	inquiry.add(pnlNorth, BorderLayout.NORTH);
+	inquiry.add(pnlSouth, BorderLayout.SOUTH);
+
+
 	return inquiry;
 }
 
 private JPanel checkrvPanel(String info) {
 
-	JPanel checkrv = new JPanel();
+	checkrv = new JPanel();
     checkrv.setLayout(new BorderLayout());
     
  
@@ -494,79 +597,192 @@ private JPanel checkrvPanel(String info) {
 }
 
 private JPanel reservationPanel(){
-//예약화면 시작
-JPanel reservation = new JPanel();
-reservation.setLayout(new GridLayout(0, 1, 10, 10));
-reservation.setBackground(Color.LIGHT_GRAY);
-JLabel reLabel = new JLabel("Reservation");
-reservation.add(reLabel);
+	//예약화면 시작
+	JPanel kindOfTicketPanel, departureRPanel, arrivalRPanel, departureDateRPanel, arrivalDateRPanel, gradePanel;
+	JLabel kindOfTicketLabel, departureRLabel, arrivalRLabel, departureDateRLabel, arrivalDateRLabel, gradeLabel;
 
-kindOfTicketR = new JTextField("항공사를 선택하세요", 30);
-reservation.add(kindOfTicketR);	
-departureR = new JTextField("출발지를 입력하세요", 10);
-reservation.add(departureR);		
-arrivalR = new JTextField("도착지를 입력하세요", 10);
-reservation.add(arrivalR);	
-departureDateR = new JTextField("탑승일을 입력하세요 (ex.1999/7/6)", 10);
-reservation.add(departureDateR);
-arrivalDateR = new JTextField("오는 날을 입력하세요 (ex.1999/7/6)", 10);
-reservation.add(arrivalDateR);
-// number = new JTextField("인원 입력", 10);
-// reservation.add(number);
-grade = new JTextField("좌석 등급을 입력하세요 ( 1.전체 , 2.이코노미 , 3.비지니스 , 4.퍼스트 )", 10);
-reservation.add(grade);
+	FlowLayout flowCenter = new FlowLayout(FlowLayout.LEFT);
+	reservation = new JPanel(flowCenter);
+	reservation.setLayout(new BoxLayout(reservation, BoxLayout.Y_AXIS));
+	reservation.setBackground(color);
 
-return reservation;
+	JPanel pnlNorth = new JPanel(new GridLayout(0,1));
+
+	JLabel reLabel = new JLabel("Reservation");
+	reLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+
+	kindOfTicketPanel = new JPanel();
+	kindOfTicketLabel = new JLabel("항공사:");
+	kindOfTicketR = new JTextField(15);
+	kindOfTicketPanel.add(kindOfTicketLabel);
+	kindOfTicketPanel.add(kindOfTicketR);
+
+	departureRPanel = new JPanel();
+	departureRLabel = new JLabel("출발지:");
+	departureR = new JTextField(15);
+	departureRPanel.add(departureRLabel);
+	departureRPanel.add(departureR);
+
+	arrivalRPanel = new JPanel();
+	arrivalRLabel = new JLabel("도착지:");
+	arrivalR = new JTextField(15);
+	arrivalRPanel.add(arrivalRLabel);
+	arrivalRPanel.add(arrivalR);
+
+	departureDateRPanel = new JPanel();
+	departureDateRLabel = new JLabel("탑승일 (ex.1999/7/6):");
+	departureDateR = new JTextField(15);
+	departureDateRPanel.add(departureDateRLabel);
+	departureDateRPanel.add(departureDateR);
+
+	arrivalDateRPanel = new JPanel();
+	arrivalDateRLabel = new JLabel("오는 날 (ex.1999/7/6):");
+	arrivalDateR = new JTextField(15);
+	arrivalDateRPanel.add(arrivalDateRLabel);
+	arrivalDateRPanel.add(arrivalDateR);
+
+	gradePanel = new JPanel();
+	gradeLabel = new JLabel("좌석 등급:");
+	grade = new JComboBox<>(grades);
+	gradePanel.add(gradeLabel);
+	gradePanel.add(grade);
+
+
+	pnlNorth.add(reLabel);
+	pnlNorth.add(kindOfTicketPanel);
+	pnlNorth.add(departureRPanel);
+	pnlNorth.add(arrivalRPanel);
+	pnlNorth.add(departureDateRPanel);
+	pnlNorth.add(arrivalDateRPanel);
+	pnlNorth.add(gradePanel);
+	
+		
+	pnlNorth.setBorder(new EmptyBorder(20,20,0,20));
+
+	reservation.add(pnlNorth, BorderLayout.NORTH);
+
+	return reservation;
 }
 
 private JPanel scheduelPanel(){
-JPanel schedule = new JPanel();
-schedule.setLayout(new GridLayout(0, 1, 10, 10));
-schedule.setBackground(Color.LIGHT_GRAY);
-JLabel shcheLabel = new JLabel("Flight Schedule");
-schedule.add(shcheLabel);
-kindOfTicketS = new JTextField("항공기 정보를 입력하세요", 30);
-schedule.add(kindOfTicketS);
-departureS = new JTextField("출발지를 입력하세요", 10);
-schedule.add(departureS);
-arrivalS = new JTextField("도착지를 입력하세요", 10);
-schedule.add(arrivalS);
-fromDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
-schedule.add(fromDate);
-toDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
-schedule.add(toDate);
 
-return schedule;
+	JPanel kindOfTicketSPanel, departureSPanel, arrivalSPanel, fromDatePanel, toDatePanel;
+	JLabel kindOfTicketSLabel, departureSLabel, arrivalSLabel, fromDateLabel, toDateLabel;
+
+	FlowLayout flowCenter = new FlowLayout(FlowLayout.LEFT);
+	schedule = new JPanel(flowCenter);
+	schedule.setLayout(new BoxLayout(schedule, BoxLayout.Y_AXIS));
+	schedule.setBackground(color);
+
+	JPanel pnlNorth = new JPanel(new GridLayout(0,1));
+
+	JLabel shcheLabel = new JLabel("Flight Schedule");
+	shcheLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+
+	kindOfTicketSPanel = new JPanel();
+	kindOfTicketSLabel = new JLabel("항공기 정보:");
+	kindOfTicketS = new JTextField(15);
+	kindOfTicketSPanel.add(kindOfTicketSLabel);
+	kindOfTicketSPanel.add(kindOfTicketS);
+
+	departureSPanel = new JPanel();
+	departureSLabel = new JLabel("출발지:");
+	departureS = new JTextField(15);
+	departureSPanel.add(departureSLabel);
+	departureSPanel.add(departureS);
+
+	arrivalSPanel = new JPanel();
+	arrivalSLabel = new JLabel("도착지:");
+	arrivalS= new JTextField(15);
+	arrivalSPanel.add(arrivalSLabel);
+	arrivalSPanel.add(arrivalS);
+
+	fromDatePanel = new JPanel();
+	fromDateLabel = new JLabel("출발 일자 (ex: 1999-05-02 15:30):");
+	fromDate = new JTextField(15);
+	fromDatePanel.add(fromDateLabel);
+	fromDatePanel.add(fromDate);
+
+	toDatePanel = new JPanel();
+	toDateLabel = new JLabel("도착 일자 (ex: 1999-05-02 15:30):");
+	toDate = new JTextField(15);
+	toDatePanel.add(toDateLabel);
+	toDatePanel.add(toDate);
+
+	pnlNorth.add(shcheLabel);
+	pnlNorth.add(kindOfTicketSPanel);
+	pnlNorth.add(departureSPanel);
+	pnlNorth.add(arrivalSPanel);
+	pnlNorth.add(fromDatePanel);
+	pnlNorth.add(toDatePanel);
+		
+	pnlNorth.setBorder(new EmptyBorder(20,20,0,20));
+
+	schedule.add(pnlNorth, BorderLayout.NORTH);
+
+	return schedule;
 }
 
 // Inhyuk Refactoring
 // 함수화 시킨 함수들
 private JPanel Register(){
 
-	
+	JPanel idPanel, pwPanel, birthDayPanel, namePanel;
+	JLabel idLabel,  pwLabel, birthDayLabel, nameLabel;
 
-Dimension btnSize = new Dimension(30 ,25);
-JPanel register = new JPanel();
-register.setLayout(new GridLayout(0, 1, 10, 10));
-register.setBackground(Color.LIGHT_GRAY);
-JLabel regLabel = new JLabel("회원가입");
-register.add(regLabel);
+	FlowLayout flowCenter = new FlowLayout(FlowLayout.CENTER);
+	register = new JPanel(flowCenter);
+	register.setLayout(new BoxLayout(register, BoxLayout.Y_AXIS));
+	JPanel pnlNorth = new JPanel(new GridLayout(0,1));
+	register.setBackground(color);
 
-regName = new JTextField("이름", 30);
-register.add(regName);	
-regID = new JTextField("ID", 30);
-register.add(regID);	
-regPW = new JTextField("PW", 30);
-register.add(regPW);	
-birthday = new JTextField("birthday", 30);
-register.add(birthday);
-JButton registerButton = new JButton("doRegister");
-registerButton.setPreferredSize(btnSize);
-registerButton.addActionListener(this);
-register.add(registerButton);
+	JLabel regLabel = new JLabel("Register");
+	regLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+
+	namePanel = new JPanel();
+	nameLabel = new JLabel("이름:");
+	regName = new JTextField(15);
+	namePanel.add(nameLabel);
+	namePanel.add(regName);
+
+	idPanel = new JPanel();
+	idLabel = new JLabel("ID:");
+	regID = new JTextField(15);
+	idPanel.add(idLabel);
+	idPanel.add(regID);
+
+	pwPanel = new JPanel();
+	pwLabel = new JLabel("PW:");
+	regPW = new JPasswordField(15);
+	pwPanel.add(pwLabel);
+	pwPanel.add(regPW);
+
+	birthDayPanel = new JPanel();
+	birthDayLabel = new JLabel("birthday:");
+	birthday= new JTextField(15);
+	birthDayPanel.add(birthDayLabel);
+	birthDayPanel.add(birthday);
+
+	pnlNorth.add(regLabel);
+	pnlNorth.add(namePanel);
+	pnlNorth.add(idPanel);
+	pnlNorth.add(pwPanel);
+	pnlNorth.add(birthDayPanel);
+
+	JPanel pnlSouth = new JPanel();
+	JButton registerButton = new JButton("doRegister");
+	registerButton.addActionListener(this);
+	pnlSouth.add(registerButton);
+
+	pnlNorth.setBorder(new EmptyBorder(20,20,0,20));
+	pnlSouth.setBorder(new EmptyBorder(0,0,10,0));
+
+	register.add(pnlNorth, BorderLayout.NORTH);
+	register.add(pnlSouth, BorderLayout.SOUTH);
 
 
-return register;
+
+	return register;
 }
 
 
@@ -624,8 +840,7 @@ button.addActionListener(new ActionListener() {
 
         } else {
             // 저장하지 않고 종료하는 코드 작성
-			reservation = new Reservation(new SamsungPaymentMethodStrategy());
-
+		reservation = new Reservation(new SamsungPaymentMethodStrategy());
 			if(!reservation.PaymentMethod()) return;
 			// System.out.println("계좌이체 스트레티지");
         }
@@ -694,9 +909,9 @@ return panel;
 
 private JPanel TicketsPanel(String type , ArrayList<Ticket> tickets, String fromDateFT , String toDateFT, String fromLocationFT ,String toLocationFT, String gradeFT){
 System.out.println( "fromDataFT:"+ fromDateFT + "\n toDateFT : " + toDateFT +"\n fromLocationFT : " +fromLocationFT + "\n toLocationFT : " +toLocationFT + "\n gradeFT : "+gradeFT + "\n");
-JPanel TicketsPanel = new JPanel( );
+TicketsPanel = new JPanel( );
 TicketsPanel.setLayout(new GridLayout( 3, 3, 10, 10));
-TicketsPanel.setBackground(Color.LIGHT_GRAY);
+TicketsPanel.setBackground(color);
 String[][] ticketContents = new String[300][7];
 System.out.println(tickets.size());
 // TicketsPanel.add(LongButtonExample("항공기 정보" , "출발지" , "도착지" , "출발일자" , "도착일자" , "인원", "좌석등급"));
@@ -774,87 +989,197 @@ return TicketsPanel;
 }
 
 private JPanel managerPanel() {
-JPanel manager = new JPanel();
-manager.setLayout(new GridLayout(0, 1, 10, 10));
-manager.setBackground(Color.LIGHT_GRAY);
-JLabel managerLabel = new JLabel("Manager Page");
-FlightName = new JTextField("비행기 정보를 입력하세요", 20);
-capacity = new JTextField("인원을 입력하세요" , 5);
-fromDate = new JTextField("출발 일자를 입력하세요 (ex: 1999-05-02 15:30 ) ", 20);
-toDate = new JTextField("도착 일자를 입력하세요 (ex: 1999-05-02 15:30 )" , 20);
-fromLocation = new JTextField("출발지를 입력하세요" , 20);
-toLocation = new JTextField("도착지를 입력하세요" , 20);
-grade = new JTextField("클래스를 입력해주세요" ,20);
-manager.add(managerLabel);
-manager.add(FlightName);
-manager.add(fromLocation);
-manager.add(toLocation);
-manager.add(fromDate);
-manager.add(toDate);
-manager.add(capacity);
-manager.add(grade);
 
-flightAdditionButton = new JButton("비행 정보 제출");
-flightAdditionButton.addActionListener(this);
-manager.add(flightAdditionButton);
+	JPanel FlightNamePanel, capacityPanel, fromDatePanel, toDatePanel, fromLocationPanel, toLocationPanel, gradePanel;
+	JLabel FlightNameLabel,  capacityLabel, fromDateLabel, toDateLabel, fromLocationLabel, toLocationLabel, gradeLabel;
 
-return manager;
+	FlowLayout flowCenter = new FlowLayout(FlowLayout.CENTER);
+	JPanel manager = new JPanel(flowCenter);
+	manager.setLayout(new BoxLayout(manager, BoxLayout.Y_AXIS));
+	JPanel pnlNorth = new JPanel(new GridLayout(0,1));
+	manager.setBackground(color);
+
+	JLabel managerLabel = new JLabel("Manager Page");
+	managerLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+
+	FlightNamePanel = new JPanel();
+	FlightNameLabel = new JLabel("비행기 정보:");
+	FlightName = new JTextField(15);
+	FlightNamePanel.add(FlightNameLabel);
+	FlightNamePanel.add(FlightName);
+
+	capacityPanel = new JPanel();
+	capacityLabel = new JLabel("인원:");
+	capacity = new JTextField(15);
+	capacityPanel.add(capacityLabel);
+	capacityPanel.add(capacity);
+
+	fromDatePanel = new JPanel();
+	fromDateLabel = new JLabel("출발 일자 (ex: 1999-05-02 15:30):");
+	fromDate = new JTextField(15);
+	fromDatePanel.add(fromDateLabel);
+	fromDatePanel.add(fromDate);
+
+	toDatePanel = new JPanel();
+	toDateLabel = new JLabel("도착 일자 (ex: 1999-05-02 15:30):");
+	toDate = new JTextField(15);
+	toDatePanel.add(toDateLabel);
+	toDatePanel.add(toDate);
+
+	fromLocationPanel = new JPanel();
+	fromLocationLabel = new JLabel("출발지:");
+	fromLocation = new JTextField(15);
+	fromLocationPanel.add(fromLocationLabel);
+	fromLocationPanel.add(fromLocation);
+
+	toLocationPanel = new JPanel();
+	toLocationLabel = new JLabel("도착지:");
+	toLocation = new JTextField(15);
+	toLocationPanel.add(toLocationLabel);
+	toLocationPanel.add(toLocation);
+
+	gradePanel = new JPanel();
+	gradeLabel = new JLabel("클래스:");
+	grade = new JComboBox<>(grades);
+	gradePanel.add(gradeLabel);
+	gradePanel.add(grade);
+
+
+	pnlNorth.add(managerLabel);
+	pnlNorth.add(FlightNamePanel);
+	pnlNorth.add(capacityPanel);
+	pnlNorth.add(fromLocationPanel);
+	pnlNorth.add(toLocationPanel);
+	pnlNorth.add(fromDatePanel);
+	pnlNorth.add(toDatePanel);
+	pnlNorth.add(gradePanel);
+    
+	JPanel pnlSouth = new JPanel();
+	flightAdditionButton = new JButton("비행 정보 제출");
+	flightAdditionButton.addActionListener(this);
+	pnlSouth.add(flightAdditionButton);
+
+	pnlNorth.setBorder(new EmptyBorder(20,20,0,20));
+	pnlSouth.setBorder(new EmptyBorder(0,0,10,0));
+
+	manager.add(pnlNorth, BorderLayout.NORTH);
+	manager.add(pnlSouth, BorderLayout.SOUTH);
+
+	return manager;
 }
 
+
+
+
 private JPanel loginPanel(){
-JPanel loginPanel = new JPanel( );
-loginPanel.setLayout(new GridLayout(0, 1, 10, 10));
-loginPanel.setBackground(Color.LIGHT_GRAY);
-JLabel maintLabel = new JLabel("Login");
+	JPanel idPanel, pwPanel;
+	JLabel mainLabel,  idLabel, pwLabel;
+	FlowLayout flowCenter = new FlowLayout(FlowLayout.CENTER);
+	JPanel loginPanel = new JPanel(flowCenter);
+	loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
+	loginPanel.setBackground(color);
+	JPanel pnlNorth = new JPanel(new GridLayout(0,1));
 
-loginPanel.add(maintLabel);
-ID = new JTextField("아이디를 입력하세요", 30);
-loginPanel.add(ID);
-password = new JTextField("비밀번호를 입력하세요", 30);
-loginPanel.add(password);
-Dimension btnSize = new Dimension(30 ,25);
-JButton checkLogin = new JButton("doLogin");
-checkLogin.setPreferredSize(new Dimension(20,20));
-checkLogin.addActionListener(this);
-loginPanel.add(checkLogin);
+	mainLabel = new JLabel("Login");
+	mainLabel.setFont(new Font("Verdana", Font.BOLD, 20));
 
-return loginPanel;
+	idPanel = new JPanel();
+	idLabel = new JLabel("ID:");
+	ID = new JTextField(15);
+	idPanel.add(idLabel);
+	idPanel.add(ID);
+
+	pwPanel = new JPanel();
+	pwLabel = new JLabel("PW:");
+	password = new JPasswordField(15);
+	pwPanel.add(pwLabel);
+	pwPanel.add(password);
+
+	pnlNorth.add(mainLabel);
+	pnlNorth.add(idPanel);
+	pnlNorth.add(pwPanel);
+
+	JPanel pnlSouth = new JPanel();
+	JButton checkLogin = new JButton("doLogin");
+	checkLogin.addActionListener(this);
+	pnlSouth.add(checkLogin);
+
+	pnlNorth.setBorder(new EmptyBorder(20,20,0,20));
+	pnlSouth.setBorder(new EmptyBorder(0,0,10,0));
+
+	loginPanel.add(pnlNorth, BorderLayout.NORTH);
+	loginPanel.add(pnlSouth, BorderLayout.SOUTH);
+
+	return loginPanel;
 }
 
 
 
 private JPanel homePanel(String username){
 
-JPanel homePanel = new JPanel();
-homePanel.setLayout(new GridLayout(0, 1, 10, 10));
-homePanel.setBackground(Color.LIGHT_GRAY);
-JLabel mainLabel = new JLabel("Korean Air Home Page");
-homePanel.add(mainLabel);
-// System.out.println("-->" + user.getId());
-if(username != "") {
-JLabel welcomeLabel = new JLabel(username+ "님" );
-homePanel.add(welcomeLabel);
+    JButton colorButton, LogoutButton, RegisterButton;
+	JLabel mainLabel, welcomeLabel;
+	JPanel colorButtonPanel, logoutButtonPanel, loginButtonPanel, registerButtonPanel;
+	FlowLayout flowCenter = new FlowLayout(FlowLayout.CENTER);
+	homePanel = new JPanel(flowCenter);
+	homePanel.setLayout(new BoxLayout(homePanel, BoxLayout.Y_AXIS));
+	
+	homePanel.setBackground(color);
+	JPanel pnlNorth = new JPanel(new GridLayout(0,1));
+	JPanel pnlNorthM = new JPanel(new GridLayout(0,1));
+	JPanel pnlSouth = new JPanel(new GridLayout(0,1));
+
+	pnlNorth.setBackground(color);
+	pnlSouth.setBackground(color);
+
+	mainLabel = new JLabel("Korean Air Home Page");
+	mainLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+    
+	pnlNorthM.add(mainLabel);
+
+	colorButton = new JButton("DarkMode");
+	colorButton.addActionListener(this);
+
+	colorButtonPanel = new JPanel();
+	colorButtonPanel.add(colorButton);
+	pnlNorth.add(colorButtonPanel);
+
+	new JLabel("Korean Air Home Page");
+	if(username != "") {
+		welcomeLabel = new JLabel(username+ "님" );
+		pnlNorth.add(welcomeLabel);
+		LogoutButton = new JButton("Logout");
+		LogoutButton.addActionListener(this);
+		logoutButtonPanel = new JPanel();
+		logoutButtonPanel.add(LogoutButton);
+		pnlSouth.add(logoutButtonPanel);
+	} else{
+		JButton loginButton = new JButton("Login");
+		loginButton.addActionListener(this);
+		loginButtonPanel = new JPanel();
+		loginButtonPanel.add(loginButton);
+		pnlSouth.add(loginButtonPanel);
+
+		RegisterButton = new JButton("Register");
+		RegisterButton.addActionListener(this);
+		registerButtonPanel = new JPanel();
+		registerButtonPanel.add(RegisterButton);
+		pnlSouth.add(registerButtonPanel);
+
+	}
+
+	pnlNorthM.setBorder(new EmptyBorder(20,280,0,200));
+	pnlNorth.setBorder(new EmptyBorder(60,350,100,350));
+	pnlSouth.setBorder(new EmptyBorder(60,350,100,350));
+
+	homePanel.add(pnlNorthM, BorderLayout.NORTH);
+	homePanel.add(pnlNorth, BorderLayout.NORTH);
+	homePanel.add(pnlSouth, BorderLayout.SOUTH);
+
+	return homePanel;
+
+
+ }
 }
 
 
-
-if(username != "") {
-JButton LogoutButton = new JButton("Logout");
-LogoutButton.setPreferredSize(new Dimension(20,20));
-LogoutButton.addActionListener(this);
-homePanel.add(LogoutButton);
-} else{
-JButton loginButton = new JButton("Login");
-loginButton.addActionListener(this);
-homePanel.add(loginButton);
-
-JButton RegisterButton = new JButton("Register");
-RegisterButton.setPreferredSize(new Dimension(20,20));
-RegisterButton.addActionListener(this);
-homePanel.add(RegisterButton);
-}
-
-
-return homePanel;
-}
-}
