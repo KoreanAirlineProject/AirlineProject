@@ -49,7 +49,11 @@ public class Main extends JFrame implements ActionListener
 	// private JTextField grade; // 좌석 등급 입력을 위한 객체
 	private JComboBox<String> grade;
 	private JTextField ID; // ID 입력을 위한 객체
+
+	private JTextField ticketNonMeberNum; // 티켓 번호 입력을 위한 객체
+
 	private JTextField ticketnum; // 티켓 번호 입력을 위한 객체
+	
 	private JTextField ticketnumC; // 티켓 번호 입력을 위한 객체
 	private JTextField name; // 승객이름 입력을 위한 객체
 	private JTextField nameC; // 승객이름 입력을 위한 객체
@@ -260,7 +264,7 @@ public class Main extends JFrame implements ActionListener
 				veiwInfo[i] = "";
 			}
 		
-			veiwInfo[0] = ticketnum.getText();
+			veiwInfo[0] = ticketNonMeberNum.getText();
 			veiwInfo[1] = departureDateI.getText();
 			veiwInfo[2] = name.getText();
 
@@ -276,16 +280,19 @@ public class Main extends JFrame implements ActionListener
 		else if (actionCommand.equals("InquiryC") && user.getIsLogined()) // 예약 조회 확인 버튼 클릭시에 입력 받은 정보 배열에 저장,  InquiryC는 로그인 상태에서만 동작
 		{
 
-			for(int i =0; i<3;i++){
-					veiwInfo[i] = "";
+				for(int i =0; i<3;i++){
+						veiwInfo[i] = "";
 				}
+
 				ViewReservation rv = new ViewReservation();
 
 				veiwInfo[0] = ticketnum.getText();
 				
+				System.out.println("debug" + ticketnum.getText());
 
 				result = rv.readTicket(veiwInfo[0]);
-				user.setName(veiwInfo[2]);
+				// user.setName(veiwInfo[2]);
+				System.out.println(result);
 
 				deckPanel.add("checkReserve",checkrvPanel(result));
 				dealer.show(deckPanel, "checkReserve");
@@ -490,9 +497,9 @@ private JPanel NonMemberVerificationPanel(){
 
 	ticketNumPanel = new JPanel();
 	ticketNumLabel = new JLabel("예약번호:");
-	ticketnum = new JTextField(15);
+	ticketNonMeberNum = new JTextField(15);
 	ticketNumPanel.add(ticketNumLabel);
-	ticketNumPanel.add(ticketnum);
+	ticketNumPanel.add(ticketNonMeberNum);
 
 	depDatePanel = new JPanel();
 	depDateLabel = new JLabel("탑승일 (ex.1999/7/6):");
@@ -565,16 +572,16 @@ private JPanel inpuiryPanel(){
 	pnlNorth.add(depDatePanel);
 	pnlNorth.add(namePanel);
 
-	JPanel pnlSouth = new JPanel();
-	JButton nonMemberVerificationButton = new JButton("CheckNonMember");
-	nonMemberVerificationButton.addActionListener(this);
-	pnlSouth.add(nonMemberVerificationButton);
+	// JPanel pnlSouth = new JPanel();
+	// JButton nonMemberVerificationButton = new JButton("CheckNonMember");
+	// nonMemberVerificationButton.addActionListener(this);
+	// pnlSouth.add(nonMemberVerificationButton);
 
 	pnlNorth.setBorder(new EmptyBorder(20,20,0,20));
-	pnlSouth.setBorder(new EmptyBorder(0,0,10,0));
+	// pnlSouth.setBorder(new EmptyBorder(0,0,10,0));
 
 	inquiry.add(pnlNorth, BorderLayout.NORTH);
-	inquiry.add(pnlSouth, BorderLayout.SOUTH);
+	// inquiry.add(pnlSouth, BorderLayout.SOUTH);
 
 
 	return inquiry;
