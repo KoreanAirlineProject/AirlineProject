@@ -12,7 +12,17 @@ public class Ticket {
     }
 
     public Ticket( String airplane, String fromLocation, String toLocation, String fromDate, String toDate, String capacity, String seat){
-        
+        this.airplane = airplane;
+        this.capacity = capacity;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+        this.fromLocation = fromLocation;
+        this.toLocation = toLocation;
+        this.seat = seat;
+    }
+
+    public Ticket(String id, String airplane, String fromLocation, String toLocation, String fromDate, String toDate, String capacity, String seat){
+        this.id = id;
         this.airplane = airplane;
         this.capacity = capacity;
         this.fromDate = fromDate;

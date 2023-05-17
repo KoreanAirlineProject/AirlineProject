@@ -4,48 +4,83 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
 
 
 public class ViewReservation {
 
-    public ViewReservation(){
-    
+
+    public ArrayList<Ticket> viewReservation( String info , String type){
+        if(type.equals("member")){
+           return MemberReadTicket(info);
+        }
+        return nonMemberReadTicket(info);
+        
     }
 
-    public String readTicket(String ticketID) {
+    public ArrayList<Ticket> MemberReadTicket(String userName) {
+
+        ArrayList<Ticket> reservatedTickets = new ArrayList<Ticket>();
+        
+            try (// int target = Integer.parseInt(ticketID);
+            BufferedReader br = new BufferedReader(new FileReader("ticketList.txt"))) {
+                String line;
+
+                while ((line = br.readLine()) != null) {
+                    String[] parts = line.split(";");
+                    String reservationUserName = parts[1];
+
+                    
+                    if (reservationUserName.equals(userName) ) {
+                        System.out.println(userName+ "|" +reservationUserName + ";");
+                        Ticket ticket = new Ticket(parts[0] , parts[2] , parts[3], parts[4] , parts[5], parts[6] , "10" , parts[8]);
+                        reservatedTickets.add(ticket);
+                        System.out.println(reservatedTickets.size());
+                    }
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            return reservatedTickets;
+
+        
+        //     if (!isMatched) {
+        //         return "No result";
+        //     }
+        // } catch (IOException e) {
+        //     System.out.println("ERROR: " + e.getMessage());
+        //     }
+            
+    } 
+
+    public ArrayList<Ticket> nonMemberReadTicket(String ticketID) {
+        
+        ArrayList<Ticket> reservatedTickets = new ArrayList<Ticket>();
 
         try (BufferedReader br = new BufferedReader(new FileReader("ticketList.txt"))) {
-            int target = Integer.parseInt(ticketID);
             String line;
-            boolean isMatched = false;
 
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(";");
-                int reservationNum = Integer.parseInt(parts[0]);
+                String reservationId = parts[0];
 
-                if (reservationNum == target) {
-                    isMatched = true;
-                    StringBuilder result = new StringBuilder();
-                    result.append("예약번호: ").append(parts[0]).append(" || ");
-                    result.append("항공기정보: ").append(parts[2]).append(" || ");
-                    result.append("출발지: ").append(parts[3]).append(" / 도착지: ").append(parts[4]).append(" || ");
-                    result.append("출발일자: ").append(parts[5]).append(" / 도착일자: ").append(parts[6]).append(" || ");
-                    result.append("클래스: ").append(parts[8].replace("/", "")).append("\n");
+                if (reservationId.equals(ticketID)) {
 
-                    return result.toString();
+                    Ticket ticket = new Ticket(parts[0] , parts[2] , parts[3], parts[4] , parts[5], parts[6] , "10" , parts[8]);
+                    reservatedTickets.add(ticket);
+                    
                 }
-            
-            }
-
-            if (!isMatched) {
-                return "No result";
             }
         } catch (IOException e) {
-            System.out.println("ERROR: " + e.getMessage());
-            }
-
-            return null;
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return reservatedTickets;
     } 
 
     public void deleteTicket(String ticketID) {

@@ -27,9 +27,10 @@ public class Main extends JFrame implements ActionListener
 	private String [] checkInInfo = new String[3]; //체크인 정보 
 	private String [] scheduleInfo = new String[5]; // 항공편 현황 정보
 	private Boolean isLogined = false; // 로그인 유무
-	private String result = ""; //저장된 티겟 값을 받아오는 변수
+	private ArrayList<Ticket> result = new ArrayList<Ticket>();  //저장된 티겟 값을 받아오는 변수
 	
 	
+	ViewReservation vr = new ViewReservation();
 	private CardLayout dealer;
 	private JPanel deckPanel, homePanel, loginSuccess, checkin, nonMemberVerificationPenel, inquiry, checkrv, reservation, schedule, register, TicketsPanel;
 	
@@ -165,8 +166,19 @@ public class Main extends JFrame implements ActionListener
 			dealer.show(deckPanel, "reservation"); //화면전환
 		} 
 		else if (actionCommand.equals("Inquiry")){
-			if(user.getIsLogined()) dealer.show(deckPanel, "inquiry"); //화면전환
-			else if(!user.getIsLogined()) dealer.show(deckPanel,"nonMemberVerificationPanel");
+			// if(user.getIsLogined()) dealer.show(deckPanel, "inquiry"); //화면전환
+			if(!user.getIsLogined()) {
+				deckPanel.add("nonMemberVerificationPanel" , NonMemberVerificationPanel());
+				dealer.show(deckPanel,"nonMemberVerificationPanel");
+			}
+			else{
+				
+				result = vr.viewReservation(user.getName() , "member");
+				
+				deckPanel.add("checkReserve",checkrvPanel(result));
+				dealer.show(deckPanel, "checkReserve");
+
+			}
 		} 
 		else if (actionCommand.equals("checkIn")){
 			if(user.getIsLogined()) dealer.show(deckPanel, "checkin");  //화면전환
@@ -268,36 +280,43 @@ public class Main extends JFrame implements ActionListener
 			veiwInfo[1] = departureDateI.getText();
 			veiwInfo[2] = name.getText();
 
-			result = rv.readTicket(veiwInfo[0]);
-			user.setName(veiwInfo[2]);
+			 
+			// user.setName(veiwInfo[2]);
 
 			JOptionPane.showMessageDialog(null , "인증되었습니다.");
 
+			
+				result = rv.viewReservation(veiwInfo[0] , "nonMember");
+			
+				// TODO Auto-generated catch block
+			
+			
 			deckPanel.add("checkReserve",checkrvPanel(result));
 			dealer.show(deckPanel, "checkReserve");
 			
 		}
-		else if (actionCommand.equals("InquiryC") && user.getIsLogined()) // 예약 조회 확인 버튼 클릭시에 입력 받은 정보 배열에 저장,  InquiryC는 로그인 상태에서만 동작
-		{
+		// else if (actionCommand.equals("InquiryC") && user.getIsLogined()) // 예약 조회 확인 버튼 클릭시에 입력 받은 정보 배열에 저장,  InquiryC는 로그인 상태에서만 동작
+		// {
 
-				for(int i =0; i<3;i++){
-						veiwInfo[i] = "";
-				}
+				// for(int i =0; i<3;i++){
+				// 		veiwInfo[i] = "";
+				// }
 
-				ViewReservation rv = new ViewReservation();
+				// ViewReservation rv = new ViewReservation();
 
-				veiwInfo[0] = ticketnum.getText();
+				// veiwInfo[0] = ticketnum.getText();
 				
-				System.out.println("debug" + ticketnum.getText());
+				// System.out.println("debug" + ticketnum.getText());
 
-				result = rv.readTicket(veiwInfo[0]);
-				// user.setName(veiwInfo[2]);
-				System.out.println(result);
+				// result = rv.readTicket(veiwInfo[0]);
+				// // user.setName(veiwInfo[2]);
+				// System.out.println(result);
 
-				deckPanel.add("checkReserve",checkrvPanel(result));
-				dealer.show(deckPanel, "checkReserve");
 
-		} 
+				// deckPanel.add("checkReserve",checkrvPanel(result));
+				// dealer.show(deckPanel, "checkReserve");
+
+		// } 
 		else if (actionCommand.equals("Delete")) // 삭제 버튼 클릭시에 저장된 티켓 삭제
 		{
 			ViewReservation rv = new ViewReservation();
@@ -307,7 +326,7 @@ public class Main extends JFrame implements ActionListener
 
 			JOptionPane.showMessageDialog(null , "티켓 정보가 삭제 되었습니다.");
 
-			deckPanel.add("checkReserve",checkrvPanel(""));
+			deckPanel.add("checkReserve",checkrvPanel(result));
 			dealer.show(deckPanel, "checkReserve");
 			rv.deleteTicket(veiwInfo[0]);
 
@@ -345,6 +364,7 @@ public class Main extends JFrame implements ActionListener
 		}
 		else if (actionCommand.equals("Logout")) {
 			// dealer.show(deckPanel, "homepanel");
+			user.setIsLogined(false);
 			deckPanel.add("homepanel", homePanel(""));
 			dealer.show(deckPanel, "homepanel"); 
 		}
@@ -587,18 +607,22 @@ private JPanel inpuiryPanel(){
 	return inquiry;
 }
 
-private JPanel checkrvPanel(String info) {
+private JPanel checkrvPanel(ArrayList<Ticket> tickets) {
+
+	System.out.println(tickets.size());
 
 	checkrv = new JPanel();
-    checkrv.setLayout(new BorderLayout());
+    checkrv.setLayout(new GridLayout( 10, 1, 10, 10));
     
- 
-    JLabel infoLabel = new JLabel(info);
-    checkrv.add(infoLabel, BorderLayout.CENTER);
-  
-    JButton deleteButton = new JButton("Delete");
-	deleteButton.addActionListener(this);
-    checkrv.add(deleteButton, BorderLayout.EAST);
+	for(int i = 0 ; i < tickets.size() ; ++i){
+		String info = "";
+		info += tickets.get(i).getAirplane()+ "   " + tickets.get(i).getFromLocation()+ "   " + tickets.get(i).getToLocation()+ "   " + tickets.get(i).getFromDate()+ "   " + tickets.get(i).getToDate()+ "   " + tickets.get(i).getSeat();
+		JLabel infoLabel = new JLabel(info);
+    	checkrv.add(infoLabel, BorderLayout.CENTER);
+		JButton deleteButton = new JButton("Delete");
+		deleteButton.addActionListener(this);
+		checkrv.add(deleteButton, BorderLayout.EAST);
+	}
 	
     return checkrv;
 }
