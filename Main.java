@@ -79,6 +79,7 @@ public class Main extends JFrame implements ActionListener
 	private Color color;
     private boolean isDarkMode = false;
 	
+	
 
 	public Main( )
 	{
@@ -127,7 +128,7 @@ public class Main extends JFrame implements ActionListener
 		User user = User.getUser();
 		// System.out.println(e.getSource().);
 		// System.out.println(e..getModifiers());
-		String actionCommand = e.getActionCommand( );
+		String actionCommand = e.getActionCommand();
 		
 		if (actionCommand.equals("Home")) dealer.show(deckPanel, "homepanel"); // 화면전환
 	
@@ -172,7 +173,7 @@ public class Main extends JFrame implements ActionListener
 				dealer.show(deckPanel,"nonMemberVerificationPanel");
 			}
 			else{
-				
+
 				result = vr.viewReservation(user.getName() , "member");
 				
 				deckPanel.add("checkReserve",checkrvPanel(result));
@@ -319,16 +320,18 @@ public class Main extends JFrame implements ActionListener
 		// } 
 		else if (actionCommand.equals("Delete")) // 삭제 버튼 클릭시에 저장된 티켓 삭제
 		{
-			ViewReservation rv = new ViewReservation();
+			
+			// ViewReservation rv = new ViewReservation();
 
-			veiwInfo[0] = ticketnum.getText();
-			rv.deleteTicket(veiwInfo[0]);
+			// veiwInfo[0] = ticketnum.getText();
+			// System.out.println(veiwInfo[0]);
+			// rv.deleteTicket(veiwInfo[0]);
 
-			JOptionPane.showMessageDialog(null , "티켓 정보가 삭제 되었습니다.");
+			// JOptionPane.showMessageDialog(null , "티켓 정보가 삭제 되었습니다.");
 
-			deckPanel.add("checkReserve",checkrvPanel(result));
-			dealer.show(deckPanel, "checkReserve");
-			rv.deleteTicket(veiwInfo[0]);
+			// deckPanel.add("checkReserve",checkrvPanel(result));
+			// dealer.show(deckPanel, "checkReserve");
+			// rv.deleteTicket(veiwInfo[0]);
 
 			
 		}
@@ -615,12 +618,28 @@ private JPanel checkrvPanel(ArrayList<Ticket> tickets) {
     checkrv.setLayout(new GridLayout( 10, 1, 10, 10));
     
 	for(int i = 0 ; i < tickets.size() ; ++i){
+		final int index = i; 
 		String info = "";
 		info += tickets.get(i).getAirplane()+ "   " + tickets.get(i).getFromLocation()+ "   " + tickets.get(i).getToLocation()+ "   " + tickets.get(i).getFromDate()+ "   " + tickets.get(i).getToDate()+ "   " + tickets.get(i).getSeat();
 		JLabel infoLabel = new JLabel(info);
     	checkrv.add(infoLabel, BorderLayout.CENTER);
 		JButton deleteButton = new JButton("Delete");
-		deleteButton.addActionListener(this);
+		deleteButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e ){
+				ViewReservation rv = new ViewReservation();
+
+				// veiwInfo[0] = ticketnum.getText();
+				// System.out.println(veiwInfo[0]);
+				
+				rv.deleteTicket(tickets.get(index).getId());
+				result.remove(index);
+				// rv.deleteTicket(i);
+				JOptionPane.showMessageDialog(null , "티켓 정보가 삭제 되었습니다.");
+	
+				deckPanel.add("checkReserve",checkrvPanel(result));
+				dealer.show(deckPanel, "checkReserve");
+				
+		}});
 		checkrv.add(deleteButton, BorderLayout.EAST);
 	}
 	
@@ -873,7 +892,6 @@ button.addActionListener(new ActionListener() {
             // 저장하지 않고 종료하는 코드 작성
 		reservation = new Reservation(new SamsungPaymentMethodStrategy());
 			if(!reservation.PaymentMethod()) return;
-			// System.out.println("계좌이체 스트레티지");
         }
 		// 각 표를 보고 예약을 할 수 있는 이벤트 , 각 표에 대한 정보를 필요로 하기 때문에 콜백 함수로 처리하였음.
 
@@ -881,7 +899,7 @@ button.addActionListener(new ActionListener() {
 		// 구매한 유저 , 구매한 티켓에 대한 정보
 		
 		User user = User.getUser();
-		Ticket reservedTicket = new Ticket(info1,info2,info3,info4,info5,info6,info7);
+		Ticket reservedTicket = new Ticket( "0" ,info1,info2,info3,info4,info5,info6,info7);
 		
 		// 예약 객체 생성
 
@@ -902,8 +920,8 @@ button.addActionListener(new ActionListener() {
 		// 버튼 클릭후 프로세스 
 		// 구매 확인 창을 띄운 뒤 티켓 정보와 유저정보를 ticketList.txt에 저장하고 홈 페널로 이동
 		JOptionPane.showMessageDialog(null, reservation.payment(reservedTicket));
-
-		deckPanel.add("homepanel", homePanel(user.getName()));
+		
+		// deckPanel.add("homepanel", homePanel(user.getName()));
 		dealer.show(deckPanel, "homepanel");
 
 

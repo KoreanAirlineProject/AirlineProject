@@ -31,11 +31,11 @@ public class Reservation {
     }
 
     public String payment(Ticket ticket){
-        saveTicket(ticket);
-        return paymentStrategy.payment();
+        
+        return paymentStrategy.payment(saveTicket(ticket));
     }
 
-    public void saveTicket(Ticket ticket){
+    public String saveTicket(Ticket ticket){
         
         User user = User.getUser();
 
@@ -55,6 +55,8 @@ public class Reservation {
             e.printStackTrace();
         
         }
+
+        return reservationNum;
         
     }
 
