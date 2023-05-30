@@ -38,8 +38,14 @@ public class Reservation {
     public String saveTicket(Ticket ticket){
         
         User user = User.getUser();
-
         String reservationNum = Integer.toString((int)(Math.random()*100));
+
+        // 티켓 생성 시 메멘토에 저장
+        ticket.setId(reservationNum);
+        CareTaker careTaker = new CareTaker();
+        
+        user.setState(ticket);
+        careTaker.add(user.saveStateToMemento());
 
         try{
 			BufferedWriter bw = new BufferedWriter(new FileWriter("ticketList.txt", true));

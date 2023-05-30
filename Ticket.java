@@ -94,7 +94,7 @@ public void setToLocation(String toLocation){
     this.toLocation = toLocation;
 }
 public String getSeat(){
-    return seat;
+    return this.seat;
 }
 
 public void setSeat(String seat){
