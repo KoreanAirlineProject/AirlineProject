@@ -11,10 +11,13 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Main extends JFrame implements ActionListener
 {
@@ -216,6 +219,10 @@ public class Main extends JFrame implements ActionListener
 				JOptionPane.showMessageDialog(null, "회원가입에 실패하였습니다");	
 			}
 			
+		}
+		else if(actionCommand.equals("Memento")){
+			deckPanel.add("mementoPanel" , mementoPanel());
+			dealer.show(deckPanel , "mementoPanel");
 		}
 		else if(actionCommand.equals("Manager")){
 			
@@ -466,7 +473,11 @@ private JPanel ButtonPanel1(){
 	managerButton.addActionListener(this);
 	buttonPanel1.add(managerButton);
 
-	return buttonPanel1;
+JButton mementoButton = new JButton("Memento");
+mementoButton.addActionListener(this);
+buttonPanel1.add(mementoButton);
+
+return buttonPanel1;
 }
 
 private JPanel ButtonPanel2(){
@@ -627,9 +638,84 @@ private JPanel NonMemberVerificationPanel(){
 	
 }
 
+private JPanel mementoPanel(){
+
+	ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
+	try (BufferedReader reader = new BufferedReader(new FileReader("mementoList.txt"))) {
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			String[] values = line.split(";");
+			String id = values[0];
+			String airplane = values[2];
+			String fromLocation = values[3];
+			String toLocation = values[4];
+			String fromDate = values[5];
+			String toDate = values[6];
+			String capacity = values[7];
+			String seat = values[8];
+			Ticket ticket = new Ticket(id, airplane, fromLocation, toLocation, fromDate, toDate, capacity, seat);
+			tickets.add(ticket);
+		}
+	} catch (IOException e) {
+		System.err.println("텍스트 파일 읽기 중 오류가 발생했습니다: " + e.getMessage());
+	}
+	System.out.println(tickets.size() + "개의 티켓이 복원되었습니다.");
+
+	JPanel mementoPanel = new JPanel();
+    mementoPanel.setLayout(new GridLayout( 10, 1, 10, 10));
+    
+	for(int i = 0 ; i < tickets.size() ; ++i){
+		final int index = i; 
+		String info = "";
+		info += tickets.get(i).getAirplane()+ "   " + tickets.get(i).getFromLocation()+ "   " + tickets.get(i).getToLocation()+ "   " + tickets.get(i).getFromDate()+ "   " + tickets.get(i).getToDate()+ "   " + tickets.get(i).getSeat();
+		JLabel infoLabel = new JLabel(info);
+    	mementoPanel.add(infoLabel, BorderLayout.CENTER);
+		JButton restoreButton = new JButton("Restore");
+		restoreButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e ){
+				
+				ViewReservation rv = new ViewReservation();
+
+				CareTaker careTaker = new CareTaker();
+				User user = User.getUser();
+				user.getStateFromMemento(careTaker.get(index));
+				
+				try{
+
+					BufferedWriter bw = new BufferedWriter(new FileWriter("ticketList.txt", true));
+					PrintWriter pw = new PrintWriter(bw, true);
+					
+					pw.write(user.getState().getId()+ ";" + user.getName() + ";" + user.getState().getAirplane() + ";" + user.getState().getFromLocation() + ";" + user.getState().getToLocation() + ";" + user.getState().getFromDate() + ";" +user.getState().getToDate() + ";" + user.getState().getCapacity() + ";" + user.getState().getSeat() + "\n");
+					pw.flush();
+					pw.close();
+					
+					System.out.println("==> 데이터 저장 완료!!!\n");
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+
+				// veiwInfo[0] = ticketnum.getText();
+				// System.out.println(veiwInfo[0]);
+				
+				// rv.deleteTicket(tickets.get(index).getId());
+				// result.remove(index);
+				// rv.deleteTicket(i);
+				JOptionPane.showMessageDialog(null , "티켓이 복원되었습니다.");
+	
+				// deckPanel.add("checkReserve",checkrvPanel(result));
+				// dealer.show(deckPanel, "checkReserve");
+				
+		}});
+		mementoPanel.add(restoreButton, BorderLayout.EAST);
+	}
+	
+    return mementoPanel;
+}
+
 private JPanel inpuiryPanel(){
 
-	JPanel  ticketNumPanel, depDatePanel, namePanel;
+	JPanel ticketNumPanel, depDatePanel, namePanel;
 	JLabel inLabel,  ticketNumLabel, depDateLabel, nameLabel;
 
     FlowLayout flowCenter = new FlowLayout(FlowLayout.CENTER);
