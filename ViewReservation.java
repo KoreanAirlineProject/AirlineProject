@@ -45,15 +45,7 @@ public class ViewReservation {
                 e.printStackTrace();
             }
 
-            return reservatedTickets;
-
-        
-        //     if (!isMatched) {
-        //         return "No result";
-        //     }
-        // } catch (IOException e) {
-        //     System.out.println("ERROR: " + e.getMessage());
-        //     }
+        return reservatedTickets;
             
     } 
 

@@ -10,9 +10,11 @@ public class CheckIn {
         this.departureDate = CheckInInfo[1];
         this.name = CheckInInfo[2];
     }
+    public CheckIn(){}
     String ticketID, departureDate, name;
+
     
-    public void searchCheckInInfo(){
+    public void searchCheckInInfo(Flight kor, Flight asia, Flight jeju){
         User user = User.getUser();
         try (BufferedReader br = new BufferedReader(new FileReader("ticketList.txt"))) {
             int target = Integer.parseInt(ticketID);
@@ -24,7 +26,10 @@ public class CheckIn {
 
                 int reservationNum = Integer.parseInt(parts[0]);
                 if (!user.getIsLogined() && reservationNum == target && name.equals(parts[1]) && departureDate.equals(parts[5])) {
-                    selectFlightSeat();
+                    if(parts[2].equals("KORAIR")) selectFlightSeat(kor);
+                    else if(parts[2].equals("ASIANA")) selectFlightSeat(asia);
+                    else if(parts[2].equals("JEJUAIR")) selectFlightSeat(jeju);
+                    else System.out.println("Flight Name Error");
                     break;
                 }
                 if(user.getIsLogined() && user.getName().equals(parts[1])){
@@ -38,15 +43,17 @@ public class CheckIn {
         }
      
     }
-    public void selectFlightSeat(){
-        Flight flight = new Flight(5, 5);
+
+    public void selectFlightSeat(Flight flight){
+
         String message = "이용 가능한 좌석:\n";
         for(int i = 0; i < flight.getSeats().length; i++) {
             for(int j = 0; j < flight.getSeats()[i].length; j++) {
                 if(flight.getSeats()[i][j] == 0) {
-                    message += "(" + i + ", " + j + ")\n";
+                    message += "(" + i + ", " + j + ") ";
                 }
             }
+            message += "\n\n";
         }
         String input = JOptionPane.showInputDialog(null, message + "좌석을 선택하세요 (행, 열):");
 
@@ -66,7 +73,7 @@ public class CheckIn {
             JOptionPane.showMessageDialog(null, "잘못된 좌석을 선택하셨습니다.");
             return;
         }
-        if(flight.getSeats()[row][column] != 0) {
+        if(flight.getSeats()[row][column] == 0) {
             flight.setSeat(row, column); // 좌석을 예약 처리
             JOptionPane.showMessageDialog(null, "선택하신 좌석이 예약되었습니다.");
         }
