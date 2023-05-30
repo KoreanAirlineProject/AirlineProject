@@ -6,8 +6,8 @@ public class Flight {
     private int[][] seats;
     Flight(int x, int y){
         this.seats = new int[x][y];
-        for(int i = 0; i < y; i++){
-            for(int j = 0; j < x; j++){
+        for(int i = 0; i < x; i++){
+            for(int j = 0; j < y; j++){
                 this.seats[i][j] = 0;
             }
         }

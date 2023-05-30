@@ -77,6 +77,10 @@ public class Main extends JFrame implements ActionListener
 	private String[] grades = {"전체" , "이코노미" , "비지니스" , "퍼스트"};
 	private Color color;
     private boolean isDarkMode = false;
+
+	Flight kor = new Flight(10, 5);
+    Flight asia = new Flight(9, 5);
+    Flight jeju = new Flight(8, 3);
 	
 	
 
@@ -373,7 +377,7 @@ public class Main extends JFrame implements ActionListener
 			checkInInfo[2] = nameC.getText();
 
 			CheckIn check = new CheckIn(checkInInfo);
-			check.searchCheckInInfo();
+			check.searchCheckInInfo(kor, asia, jeju);
 
 
 		}
@@ -685,6 +689,7 @@ private JPanel checkrvnPubPanel(ArrayList<Ticket> tickets) {
     for (int i = 0; i < tickets.size(); ++i) {
         final int index = i;
         String info = "";
+		String airplane = tickets.get(i).getAirplane();
         info += tickets.get(i).getAirplane() + "   " + tickets.get(i).getFromLocation() + "   " + tickets.get(i).getToLocation() + "   " + tickets.get(i).getFromDate() + "   " + tickets.get(i).getToDate() + "   " + tickets.get(i).getSeat();
         JLabel infoLabel = new JLabel(info);
         checkrv.add(infoLabel); // BorderLayout 제거
@@ -698,7 +703,10 @@ private JPanel checkrvnPubPanel(ArrayList<Ticket> tickets) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CheckIn cIn = new CheckIn();
-				cIn.selectFlightSeat();
+				if(airplane.equals("KORAIR"))cIn.selectFlightSeat(kor);
+				else if(airplane.equals("ASIANA"))cIn.selectFlightSeat(asia);
+				else if(airplane.equals("JEJUAIR"))cIn.selectFlightSeat(jeju);
+				else System.out.println("Flight Name Error");
             }
         });
 
