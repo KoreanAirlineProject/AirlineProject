@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
@@ -103,6 +102,7 @@ public class Main extends JFrame implements ActionListener
 		deckPanel.add("reservation", reservationPanel());
 		deckPanel.add("inquiry", inpuiryPanel());
 		deckPanel.add("checkReserve",checkrvPanel(result));
+		deckPanel.add("checknPubReserve",checkrvnPubPanel(result));
 		deckPanel.add("checkin", checkInPanel());
 		deckPanel.add("nonMemberVerificationPanel" , NonMemberVerificationPanel());
 		deckPanel.add("loginSuccess", LoginSuccessPanel());
@@ -181,9 +181,17 @@ public class Main extends JFrame implements ActionListener
 
 			}
 		} 
-		else if (actionCommand.equals("checkIn")){
-			if(user.getIsLogined()) dealer.show(deckPanel, "checkin");  //화면전환
-			else if(!user.getIsLogined()) dealer.show(deckPanel,"nonMemberVerificationPanel");
+		else if (actionCommand.equals("checkIn")){//체크인
+			if(!user.getIsLogined()) {
+				dealer.show(deckPanel, "checkin");
+			} //화면전환
+			else {
+
+				result = vr.viewReservation(user.getName(), "member");
+
+				deckPanel.add("checknPubReserve", checkrvnPubPanel(result));
+				dealer.show(deckPanel, "checknPubReserve");
+			}
 		} 
 		else if (actionCommand.equals("Schedule")){
 			dealer.show(deckPanel, "schedulePanel"); //화면전환	
@@ -296,6 +304,29 @@ public class Main extends JFrame implements ActionListener
 			dealer.show(deckPanel, "checkReserve");
 			
 		}
+		else if (actionCommand.equals("CheckInNonMember")) // 비회원 예약 조회 확인 버튼 클릭시에  입력 받은 정보 배열에 저장
+		{
+			ViewReservation rv = new ViewReservation();
+
+			for(int i = 0; i < 3; i++){
+				veiwInfo[i] = "";
+			}
+		
+			veiwInfo[0] = ticketnumC.getText();
+			veiwInfo[1] = departureDateI.getText();
+			veiwInfo[2] = name.getText();
+
+			 
+			// user.setName(veiwInfo[2]);
+
+			JOptionPane.showMessageDialog(null , "인증되었습니다.");
+			result = rv.viewReservation(veiwInfo[0] , "nonMember");
+			
+			
+			deckPanel.add("checknPubReserve",checkrvnPubPanel(result));
+			dealer.show(deckPanel, "checknPubReserve");
+			
+		}
 		// else if (actionCommand.equals("InquiryC") && user.getIsLogined()) // 예약 조회 확인 버튼 클릭시에 입력 받은 정보 배열에 저장,  InquiryC는 로그인 상태에서만 동작
 		// {
 
@@ -398,71 +429,71 @@ public class Main extends JFrame implements ActionListener
 			break;
 
 		}	
-}
+	}
 
 
 
 private JPanel ButtonPanel1(){
 	JPanel buttonPanel1 = new JPanel( );
-buttonPanel1.setBackground(Color.BLACK);
-buttonPanel1.setLayout(new FlowLayout());
+	buttonPanel1.setBackground(Color.BLACK);
+	buttonPanel1.setLayout(new FlowLayout());
 
-JButton mainButton = new JButton("Home");
-mainButton.addActionListener(this);
-buttonPanel1.add(mainButton);
+	JButton mainButton = new JButton("Home");
+	mainButton.addActionListener(this);
+	buttonPanel1.add(mainButton);
 
-JButton reserButton = new JButton("Reservation");
-reserButton.addActionListener(this);
-buttonPanel1.add(reserButton);
+	JButton reserButton = new JButton("Reservation");
+	reserButton.addActionListener(this);
+	buttonPanel1.add(reserButton);
 
-JButton inquiryButton = new JButton("Inquiry");
-inquiryButton.addActionListener(this);
-buttonPanel1.add(inquiryButton);
+	JButton inquiryButton = new JButton("Inquiry");
+	inquiryButton.addActionListener(this);
+	buttonPanel1.add(inquiryButton);
 
-JButton checkButton = new JButton("checkIn");
-checkButton.addActionListener(this);
-buttonPanel1.add(checkButton);
+	JButton checkButton = new JButton("checkIn");
+	checkButton.addActionListener(this);
+	buttonPanel1.add(checkButton);
 
-JButton scheduleButton = new JButton("Schedule");
-scheduleButton.addActionListener(this);
-buttonPanel1.add(scheduleButton);
-// inhyuk
-JButton managerButton = new JButton("Manager");
-managerButton.addActionListener(this);
-buttonPanel1.add(managerButton);
+	JButton scheduleButton = new JButton("Schedule");
+	scheduleButton.addActionListener(this);
+	buttonPanel1.add(scheduleButton);
+	// inhyuk
+	JButton managerButton = new JButton("Manager");
+	managerButton.addActionListener(this);
+	buttonPanel1.add(managerButton);
 
-return buttonPanel1;
+	return buttonPanel1;
 }
 
 private JPanel ButtonPanel2(){
 	JPanel buttonPanel2 = new JPanel( );
-buttonPanel2.setBackground(Color.BLACK);
-buttonPanel2.setLayout(new FlowLayout( ));
+	buttonPanel2.setBackground(Color.BLACK);
+	buttonPanel2.setLayout(new FlowLayout( ));
 
-// JButton mainConfirm = new JButton("MainC");
-// mainConfirm.addActionListener(this);
-// buttonPanel2.add(mainConfirm);
+	// JButton mainConfirm = new JButton("MainC");
+	// mainConfirm.addActionListener(this);
+	// buttonPanel2.add(mainConfirm);
 
-JButton reserConfirm = new JButton("ReservationC");
-reserConfirm.addActionListener(this);
-buttonPanel2.add(reserConfirm);
+	JButton reserConfirm = new JButton("ReservationC");
+	reserConfirm.addActionListener(this);
+	buttonPanel2.add(reserConfirm);
 
-JButton inquiryConfirm = new JButton("InquiryC");
-inquiryConfirm.addActionListener(this);
-buttonPanel2.add(inquiryConfirm);
+	JButton inquiryConfirm = new JButton("InquiryC");
+	inquiryConfirm.addActionListener(this);
+	buttonPanel2.add(inquiryConfirm);
 
-JButton checkConfirm = new JButton("checkInC");
-checkConfirm.addActionListener(this);
-buttonPanel2.add(checkConfirm);
+	JButton checkConfirm = new JButton("checkInC");
+	checkConfirm.addActionListener(this);
+	buttonPanel2.add(checkConfirm);
 
-JButton scheduleConfirm = new JButton("ScheduleC");
-scheduleConfirm.addActionListener(this);
-buttonPanel2.add(scheduleConfirm);
+	JButton scheduleConfirm = new JButton("ScheduleC");
+	scheduleConfirm.addActionListener(this);
+	buttonPanel2.add(scheduleConfirm);
 
-//inhyuk
-JButton managerConfirm = new JButton("ManagerC");
-managerConfirm.addActionListener(this);
-buttonPanel2.add(managerConfirm);
+	//inhyuk
+	JButton managerConfirm = new JButton("ManagerC");
+	managerConfirm.addActionListener(this);
+	buttonPanel2.add(managerConfirm);
 	
 	return buttonPanel2;
 }
@@ -470,35 +501,70 @@ buttonPanel2.add(managerConfirm);
 private JPanel LoginSuccessPanel(){
 	User user = User.getUser();
 
-loginSuccess = new JPanel();
-loginSuccess.setLayout(new GridLayout(0, 1, 10, 10));
-loginSuccess.setBackground(color);
-JLabel mainLabel = new JLabel("Korean Air Home Page");
-loginSuccess.add(mainLabel);
-System.out.println("-->" + user.getId());
-JLabel welcomeLabel = new JLabel(user.getName()+ "님" );
-loginSuccess.add(welcomeLabel);
+	loginSuccess = new JPanel();
+	loginSuccess.setLayout(new GridLayout(0, 1, 10, 10));
+	loginSuccess.setBackground(color);
+	JLabel mainLabel = new JLabel("Korean Air Home Page");
+	loginSuccess.add(mainLabel);
+	System.out.println("-->" + user.getId());
+	JLabel welcomeLabel = new JLabel(user.getName()+ "님" );
+	loginSuccess.add(welcomeLabel);
 
-JButton LogoutButton = new JButton("Logout");
-LogoutButton.setPreferredSize(new Dimension(20,20));
-LogoutButton.addActionListener(this);
-loginSuccess.add(LogoutButton);
+	JButton LogoutButton = new JButton("Logout");
+	LogoutButton.setPreferredSize(new Dimension(20,20));
+	LogoutButton.addActionListener(this);
+	loginSuccess.add(LogoutButton);
 
-return loginSuccess;
+	return loginSuccess;
 }
 
 private JPanel checkInPanel() {
-	checkin = new JPanel();
-	checkin.setLayout(new GridLayout(0, 1, 10, 10));
+	JPanel  ticketNumPanel, depDatePanel, namePanel;
+	JLabel checkLabel,  ticketNumLabel, depDateLabel, nameLabel;
+
+    FlowLayout flowCenter = new FlowLayout(FlowLayout.CENTER);
+	checkin = new JPanel(flowCenter);
+	checkin.setLayout(new BoxLayout(checkin, BoxLayout.Y_AXIS));
 	checkin.setBackground(color);
-	JLabel checkLabel = new JLabel("Check-in");
-	checkin.add(checkLabel);
-	ticketnumC = new JTextField("예약 번호를 입력하세요", 10);
-	checkin.add(ticketnumC);
-	departureDateC = new JTextField("탑승일을 입력하세요 (ex.1999/7/6)", 10);
-	checkin.add(departureDateC);
-	nameC = new JTextField("승객의 이름을 입력하세요", 10);
-	checkin.add(nameC);
+
+	JPanel pnlNorth = new JPanel(new GridLayout(0,1));
+
+	checkLabel = new JLabel("비회원 체크인 정보를 입력해 주세요");
+	checkLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+
+	ticketNumPanel = new JPanel();
+	ticketNumLabel = new JLabel("예약번호:");
+	ticketnumC = new JTextField(15);
+	ticketNumPanel.add(ticketNumLabel);
+	ticketNumPanel.add(ticketnumC);
+
+	depDatePanel = new JPanel();
+	depDateLabel = new JLabel("탑승일 (ex.1999-7-6):");
+	departureDateI = new JTextField(15);
+	depDatePanel.add(depDateLabel);
+	depDatePanel.add(departureDateI);
+
+	namePanel = new JPanel();
+	nameLabel = new JLabel("승객 이름:");
+	name = new JTextField(15);
+	namePanel.add(nameLabel);
+	namePanel.add(name);
+
+    pnlNorth.add(checkLabel);
+	pnlNorth.add(ticketNumPanel);
+	pnlNorth.add(depDatePanel);
+	pnlNorth.add(namePanel);
+
+	JPanel pnlSouth = new JPanel();
+	JButton checkinButton = new JButton("CheckInNonMember");
+	checkinButton.addActionListener(this);
+	pnlSouth.add(checkinButton);
+
+	pnlNorth.setBorder(new EmptyBorder(20,20,0,20));
+	pnlSouth.setBorder(new EmptyBorder(0,0,10,0));
+
+	checkin.add(pnlNorth, BorderLayout.NORTH);
+	checkin.add(pnlSouth, BorderLayout.SOUTH);
 
 	return checkin;
 }
@@ -525,7 +591,7 @@ private JPanel NonMemberVerificationPanel(){
 	ticketNumPanel.add(ticketNonMeberNum);
 
 	depDatePanel = new JPanel();
-	depDateLabel = new JLabel("탑승일 (ex.1999/7/6):");
+	depDateLabel = new JLabel("탑승일 (ex.1999-7-6):");
 	departureDateI = new JTextField(15);
 	depDatePanel.add(depDateLabel);
 	depDatePanel.add(departureDateI);
@@ -609,6 +675,55 @@ private JPanel inpuiryPanel(){
 
 	return inquiry;
 }
+
+private JPanel checkrvnPubPanel(ArrayList<Ticket> tickets) {
+    System.out.println(tickets.size());
+
+    checkrv = new JPanel();
+    checkrv.setLayout(new GridLayout(tickets.size(), 2, 10, 10)); // 그리드 레이아웃 수정
+
+    for (int i = 0; i < tickets.size(); ++i) {
+        final int index = i;
+        String info = "";
+        info += tickets.get(i).getAirplane() + "   " + tickets.get(i).getFromLocation() + "   " + tickets.get(i).getToLocation() + "   " + tickets.get(i).getFromDate() + "   " + tickets.get(i).getToDate() + "   " + tickets.get(i).getSeat();
+        JLabel infoLabel = new JLabel(info);
+        checkrv.add(infoLabel); // BorderLayout 제거
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // 버튼 패널 생성 및 플로우 레이아웃 설정
+
+        JButton deleteButton = new JButton("Delete");
+        JButton ticketPubButton = new JButton("Pub");
+
+        ticketPubButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CheckIn cIn = new CheckIn();
+				cIn.selectFlightSeat();
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ViewReservation rv = new ViewReservation();
+                rv.deleteTicket(tickets.get(index).getId());
+                result.remove(index);
+                JOptionPane.showMessageDialog(null, "티켓 정보가 삭제되었습니다.");
+
+                deckPanel.add("checknPubReserve", checkrvnPubPanel(result));
+                dealer.show(deckPanel, "checknPubReserve");
+
+            }
+        });
+
+        buttonPanel.add(ticketPubButton); // 버튼 패널에 버튼 추가
+        buttonPanel.add(deleteButton);
+
+        checkrv.add(buttonPanel); // 버튼 패널을 그리드 레이아웃에 추가
+    }
+
+    return checkrv;
+}
+
 
 private JPanel checkrvPanel(ArrayList<Ticket> tickets) {
 
@@ -837,109 +952,109 @@ private JPanel Register(){
 
 
 public JPanel LongButtonExample(String info1,String info2,String info3,String info4,String info5,String info6 , String info7 , String yesorno) {
-setTitle("Long Button Example");
-setDefaultCloseOperation(EXIT_ON_CLOSE);
+	setTitle("Long Button Example");
+	setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-JPanel panel = new JPanel(new GridLayout(4, 8)); // 1 row, 7 columns
-
-
-
-// panel.setPreferredSize(new Dimension(10, 70));
-add(panel);
-// create labels and text fields
-JLabel label1 = new JLabel(info1);
-// JTextField textField1 = new JTextField(10);
-JLabel label2 = new JLabel(info2);
-// JTextField textField2 = new JTextField(10);
-JLabel label3 = new JLabel(info3);
-// JTextField textField3 = new JTextField(10);
-JLabel label4 = new JLabel(info4);
-// JTextField textField4 = new JTextField(10);
-JLabel label5 = new JLabel(info5);
-// JTextField textField5 = new JTextField(10);
-JLabel label6 = new JLabel(info6);
-JLabel label7 = new JLabel(info7);
-// JTextField textField6 = new JTextField(10);
-// create button
-JButton button;
-
-button = new JButton("예약");
-
-button.addActionListener(new ActionListener() {
-	public void actionPerformed(ActionEvent e){
-		
-		Reservation reservation = null;
-
-		
-		int option = JOptionPane.showOptionDialog(
-            null,
-            "어떤 결제 수단으로 결재하시겠습니까?",
-            "결제 수단",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            new String[] {"카드", "삼성페이"},
-            "카드"
-        );
-        if(option == -1) return;
-        else if (option == JOptionPane.YES_OPTION) {
-            // 파일을 저장하는 코드 작성
-
-		reservation = new Reservation( new CardPaymentMethodStrategy());
-			if(!reservation.PaymentMethod()) return ;
-
-        } else {
-            // 저장하지 않고 종료하는 코드 작성
-		reservation = new Reservation(new SamsungPaymentMethodStrategy());
-			if(!reservation.PaymentMethod()) return;
-        }
-		// 각 표를 보고 예약을 할 수 있는 이벤트 , 각 표에 대한 정보를 필요로 하기 때문에 콜백 함수로 처리하였음.
-
-		// 필요한 객체 생성
-		// 구매한 유저 , 구매한 티켓에 대한 정보
-		
-		User user = User.getUser();
-		Ticket reservedTicket = new Ticket( "0" ,info1,info2,info3,info4,info5,info6,info7);
-		
-		// 예약 객체 생성
-
-		// label7 은 좌석등급
-		// 좌석등급별로 reservation에 다른 payment 전략을 적용함.
-		switch(label7.getText()){
-			case "이코노미":
-			reservation = new Reservation(new EconomyPaymentStrategy());
-			break;
-			case "비지니스":
-			reservation = new Reservation(new BusinessPaymentStrategy());
-			break;
-			case "퍼스트":
-			reservation = new Reservation(new FirstPaymentStrategy());
-			break;
-		}
-
-		// 버튼 클릭후 프로세스 
-		// 구매 확인 창을 띄운 뒤 티켓 정보와 유저정보를 ticketList.txt에 저장하고 홈 페널로 이동
-		JOptionPane.showMessageDialog(null, reservation.payment(reservedTicket));
-		
-		// deckPanel.add("homepanel", homePanel(user.getName()));
-		dealer.show(deckPanel, "homepanel");
+	JPanel panel = new JPanel(new GridLayout(4, 8)); // 1 row, 7 columns
 
 
-	}	
-});
+
+	// panel.setPreferredSize(new Dimension(10, 70));
+	add(panel);
+	// create labels and text fields
+	JLabel label1 = new JLabel(info1);
+	// JTextField textField1 = new JTextField(10);
+	JLabel label2 = new JLabel(info2);
+	// JTextField textField2 = new JTextField(10);
+	JLabel label3 = new JLabel(info3);
+	// JTextField textField3 = new JTextField(10);
+	JLabel label4 = new JLabel(info4);
+	// JTextField textField4 = new JTextField(10);
+	JLabel label5 = new JLabel(info5);
+	// JTextField textField5 = new JTextField(10);
+	JLabel label6 = new JLabel(info6);
+	JLabel label7 = new JLabel(info7);
+	// JTextField textField6 = new JTextField(10);
+	// create button
+	JButton button;
+
+	button = new JButton("예약");
+
+	button.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e){
+			
+			Reservation reservation = null;
+
+			
+			int option = JOptionPane.showOptionDialog(
+				null,
+				"어떤 결제 수단으로 결재하시겠습니까?",
+				"결제 수단",
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				new String[] {"카드", "삼성페이"},
+				"카드"
+			);
+			if(option == -1) return;
+			else if (option == JOptionPane.YES_OPTION) {
+				// 파일을 저장하는 코드 작성
+
+			reservation = new Reservation( new CardPaymentMethodStrategy());
+				if(!reservation.PaymentMethod()) return ;
+
+			} else {
+				// 저장하지 않고 종료하는 코드 작성
+			reservation = new Reservation(new SamsungPaymentMethodStrategy());
+				if(!reservation.PaymentMethod()) return;
+			}
+			// 각 표를 보고 예약을 할 수 있는 이벤트 , 각 표에 대한 정보를 필요로 하기 때문에 콜백 함수로 처리하였음.
+
+			// 필요한 객체 생성
+			// 구매한 유저 , 구매한 티켓에 대한 정보
+			
+			User user = User.getUser();
+			Ticket reservedTicket = new Ticket( "0" ,info1,info2,info3,info4,info5,info6,info7);
+			
+			// 예약 객체 생성
+
+			// label7 은 좌석등급
+			// 좌석등급별로 reservation에 다른 payment 전략을 적용함.
+			switch(label7.getText()){
+				case "이코노미":
+				reservation = new Reservation(new EconomyPaymentStrategy());
+				break;
+				case "비지니스":
+				reservation = new Reservation(new BusinessPaymentStrategy());
+				break;
+				case "퍼스트":
+				reservation = new Reservation(new FirstPaymentStrategy());
+				break;
+			}
+
+			// 버튼 클릭후 프로세스 
+			// 구매 확인 창을 띄운 뒤 티켓 정보와 유저정보를 ticketList.txt에 저장하고 홈 페널로 이동
+			JOptionPane.showMessageDialog(null, reservation.payment(reservedTicket));
+			
+			// deckPanel.add("homepanel", homePanel(user.getName()));
+			dealer.show(deckPanel, "homepanel");
 
 
-// add labels and text fields to the panel
-panel.add(label1);
-panel.add(label2);
-panel.add(label3);
-panel.add(label4);
-panel.add(label5);
-panel.add(label6);
-panel.add(label7);
-if(info1!="항공기 정보" && yesorno == "yes") panel.add(button);
+		}	
+	});
 
-setVisible(true);
+
+	// add labels and text fields to the panel
+	panel.add(label1);
+	panel.add(label2);
+	panel.add(label3);
+	panel.add(label4);
+	panel.add(label5);
+	panel.add(label6);
+	panel.add(label7);
+	if(info1!="항공기 정보" && yesorno == "yes") panel.add(button);
+
+	setVisible(true);
 
 return panel;
 }
@@ -957,84 +1072,80 @@ return panel;
 
 
 private JPanel TicketsPanel(String type , ArrayList<Ticket> tickets, String fromDateFT , String toDateFT, String fromLocationFT ,String toLocationFT, String gradeFT){
-System.out.println( "fromDataFT:"+ fromDateFT + "\n toDateFT : " + toDateFT +"\n fromLocationFT : " +fromLocationFT + "\n toLocationFT : " +toLocationFT + "\n gradeFT : "+gradeFT + "\n");
-TicketsPanel = new JPanel( );
-TicketsPanel.setLayout(new GridLayout( 3, 3, 10, 10));
-TicketsPanel.setBackground(color);
-String[][] ticketContents = new String[300][7];
-System.out.println(tickets.size());
-// TicketsPanel.add(LongButtonExample("항공기 정보" , "출발지" , "도착지" , "출발일자" , "도착일자" , "인원", "좌석등급"));
+	System.out.println( "fromDataFT:"+ fromDateFT + "\n toDateFT : " + toDateFT +"\n fromLocationFT : " +fromLocationFT + "\n toLocationFT : " +toLocationFT + "\n gradeFT : "+gradeFT + "\n");
+	TicketsPanel = new JPanel( );
+	TicketsPanel.setLayout(new GridLayout( 3, 3, 10, 10));
+	TicketsPanel.setBackground(color);
+	String[][] ticketContents = new String[300][7];
+	System.out.println(tickets.size());
+	// TicketsPanel.add(LongButtonExample("항공기 정보" , "출발지" , "도착지" , "출발일자" , "도착일자" , "인원", "좌석등급"));
 
-if(gradeFT.equals("비지니스") || gradeFT.equals("퍼스트") || gradeFT.equals("이코노미")){
-for(int i = 0 ; i < tickets.size() ; ++i){
+	if(gradeFT.equals("비지니스") || gradeFT.equals("퍼스트") || gradeFT.equals("이코노미")){
+		for(int i = 0 ; i < tickets.size() ; ++i){
 
-// Filtering
-if(fromLocationFT.equals(tickets.get(i).getFromLocation())  
-&& toLocationFT.equals(tickets.get(i).getToLocation())  &&
-fromDateFT.equals(tickets.get(i).getFromDate()) && 
-toDateFT.equals(tickets.get(i).getToDate()) &&
-gradeFT.equals(tickets.get(i).getSeat())
-){
-	
-	Ticket ticket = tickets.get(i);
+			// Filtering
+			if(fromLocationFT.equals(tickets.get(i).getFromLocation())  
+			&& toLocationFT.equals(tickets.get(i).getToLocation())  &&
+			fromDateFT.equals(tickets.get(i).getFromDate()) && 
+			toDateFT.equals(tickets.get(i).getToDate()) &&
+			gradeFT.equals(tickets.get(i).getSeat())
+			){
+				
+				Ticket ticket = tickets.get(i);
 
-	ticketContents[i][0] = ticket.getAirplane();
-	ticketContents[i][1] = ticket.getFromLocation();
-	ticketContents[i][2] = ticket.getToLocation();
-	ticketContents[i][3] = ticket.getFromDate();
-	ticketContents[i][4] = ticket.getToDate();
-	ticketContents[i][5] =  ticket.getCapacity();
-	ticketContents[i][6] = ticket.getSeat();
-	
-	TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6], "yes") );
-}
+				ticketContents[i][0] = ticket.getAirplane();
+				ticketContents[i][1] = ticket.getFromLocation();
+				ticketContents[i][2] = ticket.getToLocation();
+				ticketContents[i][3] = ticket.getFromDate();
+				ticketContents[i][4] = ticket.getToDate();
+				ticketContents[i][5] =  ticket.getCapacity();
+				ticketContents[i][6] = ticket.getSeat();
+				
+				TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6], "yes") );
+			}
+		}	
+	}
+	else {
 
+		for(int i = 0 ; i < tickets.size() ; ++i){
+		// System.out.println(tickets.get(i).getFromLocation());
 
+		// Filtering
+			if(fromLocationFT.equals(tickets.get(i).getFromLocation())  
+			&& toLocationFT.equals(tickets.get(i).getToLocation())  &&
+			fromDateFT.equals(tickets.get(i).getFromDate()) && 
+			toDateFT.equals(tickets.get(i).getToDate())
+			){
+				
+				Ticket ticket = tickets.get(i);
 
-}	
-} else{
+				ticketContents[i][0] = ticket.getAirplane();
+				ticketContents[i][1] = ticket.getFromLocation();
+				ticketContents[i][2] = ticket.getToLocation();
+				ticketContents[i][3] = ticket.getFromDate();
+				ticketContents[i][4] = ticket.getToDate();
+				ticketContents[i][5] =  ticket.getCapacity();
+				ticketContents[i][6] = ticket.getSeat();
+				
+				
+				
+				if(type=="reservation") TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6],"yes"));
+				else if(type=="schedule") TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6],"no"));
 
-for(int i = 0 ; i < tickets.size() ; ++i){
-// System.out.println(tickets.get(i).getFromLocation());
-
-// Filtering
-if(fromLocationFT.equals(tickets.get(i).getFromLocation())  
-&& toLocationFT.equals(tickets.get(i).getToLocation())  &&
-fromDateFT.equals(tickets.get(i).getFromDate()) && 
-toDateFT.equals(tickets.get(i).getToDate())
-){
-	
-	Ticket ticket = tickets.get(i);
-
-	ticketContents[i][0] = ticket.getAirplane();
-	ticketContents[i][1] = ticket.getFromLocation();
-	ticketContents[i][2] = ticket.getToLocation();
-	ticketContents[i][3] = ticket.getFromDate();
-	ticketContents[i][4] = ticket.getToDate();
-	ticketContents[i][5] =  ticket.getCapacity();
-	ticketContents[i][6] = ticket.getSeat();
-	
-	
-	
-	if(type=="reservation") TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6],"yes"));
-	else if(type=="schedule") TicketsPanel.add(LongButtonExample(ticketContents[i][0] , ticketContents[i][1],ticketContents[i][2],ticketContents[i][3],ticketContents[i][4],ticketContents[i][5],ticketContents[i][6],"no"));
-
-}
-
-
-}	
-}
+			}
+		}	
+	}
 
 
-if(type == "schedule") {
-JButton closeButton = new JButton("닫기");
-closeButton.addActionListener(this);
-TicketsPanel.add(closeButton);	
-}
+	if(type == "schedule") {
+		JButton closeButton = new JButton("닫기");
+		closeButton.addActionListener(this);
+		TicketsPanel.add(closeButton);	
+	}
 
 
 
-return TicketsPanel;
+	return TicketsPanel;
 }
 
 private JPanel managerPanel() {
@@ -1230,5 +1341,3 @@ private JPanel homePanel(String username){
 
  }
 }
-
-

@@ -10,6 +10,7 @@ public class CheckIn {
         this.departureDate = CheckInInfo[1];
         this.name = CheckInInfo[2];
     }
+    public CheckIn(){}
     String ticketID, departureDate, name;
     
     public void searchCheckInInfo(){
@@ -38,6 +39,7 @@ public class CheckIn {
         }
      
     }
+
     public void selectFlightSeat(){
         Flight flight = new Flight(5, 5);
         String message = "이용 가능한 좌석:\n";
@@ -66,7 +68,7 @@ public class CheckIn {
             JOptionPane.showMessageDialog(null, "잘못된 좌석을 선택하셨습니다.");
             return;
         }
-        if(flight.getSeats()[row][column] != 0) {
+        if(flight.getSeats()[row][column] == 0) {
             flight.setSeat(row, column); // 좌석을 예약 처리
             JOptionPane.showMessageDialog(null, "선택하신 좌석이 예약되었습니다.");
         }
