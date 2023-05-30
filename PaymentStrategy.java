@@ -1,6 +1,6 @@
 public interface PaymentStrategy {
 
-    public String payment();   
+    public String payment( String ticketNum);   
 
 }
 
